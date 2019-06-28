@@ -4,10 +4,11 @@ import json
 import threading
 import logging
 import colours
+import nodes
 from team import Team
 from player import Player
 from map import Map
-from node import Node
+from nodes import Node
 from vector import Vector
 import random
 
@@ -99,4 +100,3 @@ class Program:
             player.show(self.screen)
         for node in self.nodes:
             node.show(self.screen)
-        

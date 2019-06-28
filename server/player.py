@@ -2,12 +2,12 @@ import logging
 import json
 import threading
 import pygame
-import node
+import nodes
 import vector
 import colours
 from tools import *
 from vector import Vector
-from node import Node
+from nodes import Node
 
 logger = logging.getLogger(__name__)
 
@@ -55,13 +55,16 @@ class Player:
                     self.node.pos.x = self.pos.x
                     self.node.pos.y = self.pos.y
                     self.node.is_placed = True
+                    self.node.update_links(nodes)
                     self.node = None
                     self.node_ready = False
                     self.node_cooldown = NODE_COOLDOWN
+
                 else:
                     for node in nodes:
                         if node.pos.quadrance_to(self.pos) < PLAYER_RADIUS * PLAYER_RADIUS:
                             self.node = node
+                            self.node.team = self.team
                             self.node.is_placed = False
                             self.node_ready = False
                             self.node_cooldown = NODE_COOLDOWN
@@ -74,4 +77,4 @@ class Player:
     def show(self, screen):
         pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
         if self.node:
-            pygame.draw.ellipse(screen, node.DARK_RED, [self.pos.x-node.NODE_SIZE/2, self.pos.y-node.NODE_SIZE/2, node.NODE_SIZE, node.NODE_SIZE], 2)
+            pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-nodes.NODE_RADIUS/2, self.pos.y-nodes.NODE_RADIUS/2, nodes.NODE_RADIUS, nodes.NODE_RADIUS], 2)
