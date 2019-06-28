@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 PLAYER_SPEED = 1
 PLAYER_RADIUS = 50
+NODE_COOLDOWN = 100
 
 class Player:
 
@@ -19,6 +20,8 @@ class Player:
         logger.debug("Creating player.")
         self.pos = vector.Vector(0, 0)
         self.key_left = False
+        self.node_ready = True
+        self.node_cooldown = 0
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
@@ -40,9 +43,19 @@ class Player:
         elif self.key_down:
             self.pos.y += PLAYER_SPEED
 
-        if self.key_space:
-            return Node(self.pos)
+        if self.node_ready:
+            if self.key_space:
+                self.node_cooldown = NODE_COOLDOWN
+                self.node_ready = False
+                return Node(self.pos)
+        else:
+            self.node_cooldown -= 1
+            if self.node_cooldown <= 0:
+                self.node_ready = True
         return None
 
     def show(self, screen):
         pygame.draw.ellipse(screen, colours.WHITE, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
+        font = pygame.font.SysFont('Calibri', 12, True, False)
+        bar_step = 0.5
+        screen.blit(font.render(str(self.node_cooldown), True, colours.WHITE), [self.pos.x, self.pos.y+PLAYER_RADIUS])
