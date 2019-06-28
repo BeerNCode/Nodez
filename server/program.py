@@ -4,9 +4,12 @@ import json
 import threading
 import logging
 import colours
+from team import Team
 from player import Player
 from map import Map
 from node import Node
+from vector import Vector
+import random
 
 from tools import *
 
@@ -34,11 +37,7 @@ COLOURS = {
     }
 TILESIZE = 40
 
-
-IP_ADDRESS = "0.0.0.0"
-PORT = 5000
-
-
+NUMBER_OF_NODES = 20
 
 logger = logging.getLogger(__name__)
 
@@ -49,9 +48,19 @@ class Program:
     def __init__(self):
         pygame.display.set_caption("Nodez")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+        self.teams = []
+        self.teams.append(Team("Sharks", (0, 0, 255)))
+        self.teams.append(Team("Tigers", (0, 255, 0)))
+
         self.players = []
         self.nodes = []
-        self.players.append(Player())
+        for i in range(NUMBER_OF_NODES):
+            x = random.random() * SCREEN_WIDTH
+            y = random.random() * SCREEN_HEIGHT
+            self.nodes.append(Node(Vector(x, y)))
+
+        self.players.append(Player("Dave",self.teams[0],{"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
+        self.players.append(Player("Tom",self.teams[1], {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_g}))
         self.running = True
 
     def update(self):
@@ -62,17 +71,13 @@ class Program:
             self.update_events()
             
             for player in self.players:
-                node = player.update()
-                if node is not None:
-                    self.nodes.append(node)
+                player.update(self.nodes)
             for node in self.nodes:
                 node.update()
 
             self.render()
 
             pygame.display.flip()
-
-
 
     def update_events(self):
         for event in pygame.event.get():
@@ -89,9 +94,7 @@ class Program:
         self.screen.fill(colours.BLACK)
 
         map = Map()
-        for row in range(map.height): 
-            for col in range(map.width):
-                pygame.draw.rect(self.screen,COLOURS[map.tilemap[row][col]],(col*map.tilesize,row*map.tilesize,map.tilesize,map.tilesize))
+        map.show(self.screen)
         for player in self.players:
             player.show(self.screen)
         for node in self.nodes:
