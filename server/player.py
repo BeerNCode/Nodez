@@ -16,8 +16,11 @@ NODE_COOLDOWN = 100
 
 class Player:
 
-    def __init__(self):
+    def __init__(self, name, team, controls):
         logger.debug("Creating player.")
+        self.name = name
+        self.team = team
+        self.controls = controls
         self.pos = vector.Vector(0, 0)
         self.key_left = False
         self.node_ready = True
@@ -25,11 +28,11 @@ class Player:
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
-        self.key_up = keys[pygame.K_UP]
-        self.key_down = keys[pygame.K_DOWN]
-        self.key_left = keys[pygame.K_LEFT]
-        self.key_right = keys[pygame.K_RIGHT]
-        self.key_space = keys[pygame.K_SPACE]
+        self.key_up = keys[self.controls["up"]]
+        self.key_down = keys[self.controls["down"]]
+        self.key_left = keys[self.controls["left"]]
+        self.key_right = keys[self.controls["right"]]
+        self.key_space = keys[self.controls["space"]]
 
     def update(self):
         self.capture_inputs()
@@ -55,7 +58,7 @@ class Player:
         return None
 
     def show(self, screen):
-        pygame.draw.ellipse(screen, colours.WHITE, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
+        pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
         font = pygame.font.SysFont('Calibri', 12, True, False)
         bar_step = 0.5
         screen.blit(font.render(str(self.node_cooldown), True, colours.WHITE), [self.pos.x, self.pos.y+PLAYER_RADIUS])

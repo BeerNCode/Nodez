@@ -4,6 +4,7 @@ import json
 import threading
 import logging
 import colours
+from team import Team
 from player import Player
 from node import Node
 
@@ -28,9 +29,14 @@ class Program:
     def __init__(self):
         pygame.display.set_caption("Nodez")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+        self.teams = []
+        self.teams.append(Team("Sharks", (0, 0, 255)))
+        self.teams.append(Team("Tigers", (0, 255, 0)))
+
         self.players = []
         self.nodes = []
-        self.players.append(Player())
+        self.players.append(Player("Dave",self.teams[0],{"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
+        self.players.append(Player("Tom",self.teams[1], {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_g}))
         self.running = True
 
     def update(self):
@@ -50,8 +56,6 @@ class Program:
             self.render()
 
             pygame.display.flip()
-
-
 
     def update_events(self):
         for event in pygame.event.get():
