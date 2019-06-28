@@ -30,9 +30,9 @@ PURPLE = (192,77,249)
 BLUE = (43,209,252)
 RED = (255,63,63)
 COLOURS = {
-        OPEN_TILE : BLACK,
-        HIGH_NOISE : RED,
-        SOURCE_TILE : GREEN,
+        OPEN_TILE : PINK,
+        HIGH_NOISE : YELLOW,
+        SOURCE_TILE : PURPLE,
         SINK_TILE : BLUE
     }
 TILESIZE = 40
