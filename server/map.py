@@ -20,9 +20,9 @@ class Map:
     tilesize = TILESIZE
     tilemap = [
         [OPEN_TILE,OPEN_TILE,OPEN_TILE],
-        [OPEN_TILE,OPEN_TILE,OPEN_TILE],
-        [OPEN_TILE,OPEN_TILE,OPEN_TILE],
-        [OPEN_TILE,OPEN_TILE,OPEN_TILE]
+        [HIGH_NOISE,SOURCE_TILE,OPEN_TILE],
+        [OPEN_TILE,OPEN_TILE,HIGH_NOISE],
+        [SOURCE_TILE,OPEN_TILE,OPEN_TILE]
         ]
     height = 4
     width = 3

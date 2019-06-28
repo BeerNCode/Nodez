@@ -21,7 +21,7 @@ OPEN_TILE = 0
 HIGH_NOISE = 1
 SOURCE_TILE = 2
 SINK_TILE = 3
-BLACK = (0,0,0)
+BLACK = (10,10,10)
 BROWN = (153,76,0)
 GREEN = (30,255,30)
 BLUE = (30,40,255)
@@ -91,8 +91,9 @@ class Program:
         map = Map()
         for row in range(map.height): 
             for col in range(map.width):
-                pygame.draw.rect(self.screen,COLOURS[map.tilemap[row][col]],(map.height*map.tilesize,map.width*map.tilesize,map.tilesize,map.tilesize))
+                pygame.draw.rect(self.screen,COLOURS[map.tilemap[row][col]],(col*map.tilesize,row*map.tilesize,map.tilesize,map.tilesize))
         for player in self.players:
             player.show(self.screen)
         for node in self.nodes:
             node.show(self.screen)
+        
