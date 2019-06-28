@@ -94,9 +94,7 @@ class Program:
         self.screen.fill(colours.BLACK)
 
         map = Map()
-        for row in range(map.height): 
-            for col in range(map.width):
-                pygame.draw.rect(self.screen,COLOURS[map.tilemap[row][col]],(col*map.tilesize,row*map.tilesize,map.tilesize,map.tilesize))
+        map.show(self.screen)
         for player in self.players:
             player.show(self.screen)
         for node in self.nodes:
