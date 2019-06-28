@@ -2,10 +2,8 @@
 import pygame
 import json
 import threading
-import clients
 import logging
-
-from socketIO_client import SocketIO
+import colours
 
 from tools import *
 
@@ -26,10 +24,10 @@ class Program:
     screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
     def __init__(self):
+        pygame.display.set_caption("Nodez")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
         self.players = []
         self.running = True
-        pygame.display.set_caption("Nodez")
 
     def update(self):
         logger.info("Got update!")
@@ -51,4 +49,9 @@ class Program:
             pygame.display.flip()
 
     def render(self):
-        pass
+        self.screen.fill(colours.BLACK)
+        sprites = pygame.sprite.Group()
+        for idx, player in enumerate(self.players):
+            player.show(self.screen)
+            sprites.add(player)
+        sprites.draw(self.screen)
