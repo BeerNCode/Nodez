@@ -11,7 +11,7 @@ class Node:
 
     def __init__(self, pos):
         self.pos = vector.Vector(pos.x, pos.y)
-        self.is_on = True
+        self.is_placed = True
 
     def update(self):
         pass

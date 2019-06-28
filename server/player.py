@@ -54,7 +54,7 @@ class Player:
                 if self.node is not None:
                     self.node.pos.x = self.pos.x
                     self.node.pos.y = self.pos.y
-                    self.node.is_on = True
+                    self.node.is_placed = True
                     self.node = None
                     self.node_ready = False
                     self.node_cooldown = NODE_COOLDOWN
@@ -62,7 +62,7 @@ class Player:
                     for node in nodes:
                         if node.pos.quadrance_to(self.pos) < PLAYER_RADIUS * PLAYER_RADIUS:
                             self.node = node
-                            self.node.is_on = False
+                            self.node.is_placed = False
                             self.node_ready = False
                             self.node_cooldown = NODE_COOLDOWN
                             break
