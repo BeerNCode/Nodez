@@ -4,6 +4,7 @@ import json
 import threading
 import logging
 import colours
+from player import Player
 
 from tools import *
 
@@ -27,6 +28,7 @@ class Program:
         pygame.display.set_caption("Nodez")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
         self.players = []
+        self.players.append(Player())
         self.running = True
 
     def update(self):
@@ -50,6 +52,9 @@ class Program:
 
     def render(self):
         self.screen.fill(colours.BLACK)
+
+        pygame.draw.ellipse(self.screen, colours.WHITE, [SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 100, 100], 2)
+
         sprites = pygame.sprite.Group()
         for idx, player in enumerate(self.players):
             player.show(self.screen)
