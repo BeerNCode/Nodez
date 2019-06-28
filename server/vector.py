@@ -24,6 +24,11 @@ class Vector:
     def bearing(self):
         return math.atan2(self.x, self.y)
 
+    def quadrance_to(self, other):
+        dx = self.x - other.x
+        dy = self.y - other.y
+        return dx*dx + dy*dy
+
     @staticmethod
     def fromAngle(angle):
         return Vector(math.cos(angle), math.sin(angle))

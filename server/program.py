@@ -8,6 +8,8 @@ from team import Team
 from player import Player
 from map import Map
 from node import Node
+from vector import Vector
+import random
 
 from tools import *
 
@@ -35,11 +37,7 @@ COLOURS = {
     }
 TILESIZE = 40
 
-
-IP_ADDRESS = "0.0.0.0"
-PORT = 5000
-
-
+NUMBER_OF_NODES = 20
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +54,11 @@ class Program:
 
         self.players = []
         self.nodes = []
+        for i in range(NUMBER_OF_NODES):
+            x = random.random() * SCREEN_WIDTH
+            y = random.random() * SCREEN_HEIGHT
+            self.nodes.append(Node(Vector(x, y)))
+
         self.players.append(Player("Dave",self.teams[0],{"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
         self.players.append(Player("Tom",self.teams[1], {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_g}))
         self.running = True
@@ -68,9 +71,7 @@ class Program:
             self.update_events()
             
             for player in self.players:
-                node = player.update()
-                if node is not None:
-                    self.nodes.append(node)
+                player.update(self.nodes)
             for node in self.nodes:
                 node.update()
 

@@ -2,6 +2,7 @@ import logging
 import json
 import threading
 import pygame
+import node
 import vector
 import colours
 from tools import *
@@ -12,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 PLAYER_SPEED = 1
 PLAYER_RADIUS = 50
-NODE_COOLDOWN = 100
+
+NODE_COOLDOWN = 50
 
 class Player:
 
@@ -23,8 +25,9 @@ class Player:
         self.controls = controls
         self.pos = vector.Vector(0, 0)
         self.key_left = False
-        self.node_ready = True
+        self.node = None
         self.node_cooldown = 0
+        self.node_ready = True
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
@@ -34,7 +37,7 @@ class Player:
         self.key_right = keys[self.controls["right"]]
         self.key_space = keys[self.controls["space"]]
 
-    def update(self):
+    def update(self, nodes):
         self.capture_inputs()
 
         if self.key_left:
@@ -48,17 +51,27 @@ class Player:
 
         if self.node_ready:
             if self.key_space:
-                self.node_cooldown = NODE_COOLDOWN
-                self.node_ready = False
-                return Node(self.pos)
+                if self.node is not None:
+                    self.node.pos.x = self.pos.x
+                    self.node.pos.y = self.pos.y
+                    self.node.is_on = True
+                    self.node = None
+                    self.node_ready = False
+                    self.node_cooldown = NODE_COOLDOWN
+                else:
+                    for node in nodes:
+                        if node.pos.quadrance_to(self.pos) < PLAYER_RADIUS * PLAYER_RADIUS:
+                            self.node = node
+                            self.node.is_on = False
+                            self.node_ready = False
+                            self.node_cooldown = NODE_COOLDOWN
+                            break
         else:
             self.node_cooldown -= 1
             if self.node_cooldown <= 0:
                 self.node_ready = True
-        return None
 
     def show(self, screen):
         pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
-        font = pygame.font.SysFont('Calibri', 12, True, False)
-        bar_step = 0.5
-        screen.blit(font.render(str(self.node_cooldown), True, colours.WHITE), [self.pos.x, self.pos.y+PLAYER_RADIUS])
+        if self.node:
+            pygame.draw.ellipse(screen, node.DARK_RED, [self.pos.x-node.NODE_SIZE/2, self.pos.y-node.NODE_SIZE/2, node.NODE_SIZE, node.NODE_SIZE], 2)
