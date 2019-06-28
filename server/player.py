@@ -6,40 +6,43 @@ import vector
 import colours
 from tools import *
 from vector import Vector
+from node import Node
 
 logger = logging.getLogger(__name__)
 
-PLAYER_SPEED = 5
+PLAYER_SPEED = 1
+PLAYER_RADIUS = 50
 
-class Player(pygame.sprite.Sprite):
+class Player:
 
     def __init__(self):
         logger.debug("Creating player.")
         self.pos = vector.Vector(0, 0)
+        self.key_left = False
 
-    def get_inputs(self):
+    def capture_inputs(self):
         keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_UP]:
-            self.key_up = True
-        if keys[pygame.K_DOWN]:
-            self.key_down = True
-        if keys[pygame.K_LEFT]:
-            self.key_left = True
-        if keys[pygame.K_RIGHT]:
-            self.key_right = True
-        if keys[pygame.K_SPACE]:
-            self.key_space = True
+        self.key_up = keys[pygame.K_UP]
+        self.key_down = keys[pygame.K_DOWN]
+        self.key_left = keys[pygame.K_LEFT]
+        self.key_right = keys[pygame.K_RIGHT]
+        self.key_space = keys[pygame.K_SPACE]
 
     def update(self):
+        self.capture_inputs()
+
         if self.key_left:
             self.pos.x -= PLAYER_SPEED
         elif self.key_right:
             self.pos.x += PLAYER_SPEED
-        elif self.key_up:
-            self.pos.y += PLAYER_SPEED
-        elif self.key_down:
+        if self.key_up:
             self.pos.y -= PLAYER_SPEED
+        elif self.key_down:
+            self.pos.y += PLAYER_SPEED
 
-    def render(self, screen):
-        pygame.draw.ellipse(screen, colours.WHITE, [x, 20, 250, 100], 2)
+        if self.key_space:
+            return Node(self.pos)
+        return None
+
+    def show(self, screen):
+        pygame.draw.ellipse(screen, colours.WHITE, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
