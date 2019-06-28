@@ -1,4 +1,4 @@
-
+import pygame
 OPEN_TILE = 0
 HIGH_NOISE = 1
 SOURCE_TILE = 2
@@ -26,4 +26,9 @@ class Map:
         ]
     height = 4
     width = 3
+
+    def show(self,screen):
+        for row in range(self.height): 
+            for col in range(self.width):
+                pygame.draw.rect(screen,COLOURS[self.tilemap[row][col]],(col*self.tilesize,row*self.tilesize,self.tilesize,self.tilesize))
     
