@@ -1,4 +1,3 @@
-var socket;
 
 const CONTROLLER_STATE_UPDATE = "update";
 const CONTROLLER_STATE_UPDATE_FREQUENCY = 100;
@@ -8,6 +7,11 @@ const PORT = "5000";
 let canvas;
 let buttons;
 let button_list;
+
+console.log("Connecting to socket")
+let connection_string = 'http://' + IP_ADDRESS + ':' + PORT
+let socket = io.connect(connection_string);
+console.log("Socket connected is: "+socket.connected)
 
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
@@ -43,14 +47,8 @@ function sendControllerState() {
         right: buttons.right.is_pressed(touches),
     }
     console.log("Sending state update..");
-
+    console.log(state)
     socket.emit(CONTROLLER_STATE_UPDATE, state);
-}
-
-function mousePressed() {
-    console.log("Trying to connect to http://"+IP_ADDRESS+":"+PORT)
-    socket = io.connect('http://' + IP_ADDRESS + ':' + PORT);
-    //console.log("State is: "+socket.connected);
 }
 
 function draw() {
