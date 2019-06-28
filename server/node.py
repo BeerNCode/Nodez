@@ -16,5 +16,5 @@ class Node:
         pass
 
     def show(self, screen):
-        pygame.draw.ellipse(screen, DARK_RED, [self.pos.x, self.pos.y, NODE_SIZE, NODE_SIZE], 2)
-        pygame.draw.ellipse(screen, RED, [self.pos.x, self.pos.y, NODE_RADIUS, NODE_RADIUS], 2)
+        pygame.draw.ellipse(screen, DARK_RED, [self.pos.x-NODE_SIZE/2, self.pos.y-NODE_SIZE/2, NODE_SIZE, NODE_SIZE], 2)
+        pygame.draw.ellipse(screen, RED, [self.pos.x-NODE_RADIUS/2, self.pos.y-NODE_RADIUS/2, NODE_RADIUS, NODE_RADIUS], 2)

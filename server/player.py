@@ -11,6 +11,7 @@ from node import Node
 logger = logging.getLogger(__name__)
 
 PLAYER_SPEED = 1
+PLAYER_RADIUS = 50
 
 class Player:
 
@@ -44,4 +45,4 @@ class Player:
         return None
 
     def show(self, screen):
-        pygame.draw.ellipse(screen, colours.WHITE, [self.pos.x, self.pos.y, 50, 50], 2)
+        pygame.draw.ellipse(screen, colours.WHITE, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
