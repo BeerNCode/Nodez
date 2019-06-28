@@ -11,10 +11,9 @@ from nodes import Node
 
 logger = logging.getLogger(__name__)
 
-PLAYER_SPEED = 1
-PLAYER_RADIUS = 50
-
-NODE_COOLDOWN = 50
+PLAYER_SPEED = 0.5
+PLAYER_RADIUS = 10
+NODE_COOLDOWN = 100
 
 class Player:
 
@@ -62,6 +61,9 @@ class Player:
 
                 else:
                     for node in nodes:
+                        if node.is_fixed:
+                            continue
+
                         if node.pos.quadrance_to(self.pos) < PLAYER_RADIUS * PLAYER_RADIUS:
                             self.node = node
                             self.node.team = self.team

@@ -50,15 +50,27 @@ class Program:
         pygame.display.set_caption("Nodez")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
         self.teams = []
-        self.teams.append(Team("Sharks", (0, 0, 255)))
-        self.teams.append(Team("Tigers", (0, 255, 0)))
-
         self.players = []
         self.nodes = []
+
+        teamA = Team("Sharks", (0, 0, 255))
+        teamB = Team("Tigers", (0, 255, 0))
+        self.teams.append(teamA)
+        self.teams.append(teamB)
+        teamANode = Node(True,False,Vector(SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.5))
+        teamBNode = Node(True,False,Vector(SCREEN_WIDTH*0.9, SCREEN_HEIGHT*0.5))
+        teamANode.team = teamA
+        teamBNode.team = teamB
+        teamA.node = teamANode
+        teamB.node = teamBNode
+        self.nodes.append(teamANode)
+        self.nodes.append(teamBNode)
+        self.nodes.append(Node(True,True,Vector(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5)))
+
         for i in range(NUMBER_OF_NODES):
             x = random.random() * SCREEN_WIDTH
             y = random.random() * SCREEN_HEIGHT
-            self.nodes.append(Node(Vector(x, y)))
+            self.nodes.append(Node(False,False,Vector(x, y)))
 
         self.players.append(Player("Dave",self.teams[0],{"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
         self.players.append(Player("Tom",self.teams[1], {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_g}))
@@ -75,6 +87,8 @@ class Program:
                 player.update(self.nodes)
             for node in self.nodes:
                 node.update()
+
+
 
             self.render()
 
