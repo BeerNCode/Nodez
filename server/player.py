@@ -41,5 +41,5 @@ class Player(pygame.sprite.Sprite):
         elif self.key_down:
             self.pos.y -= PLAYER_SPEED
 
-    def render(self, screen):
-        pygame.draw.ellipse(screen, colours.WHITE, [x, 20, 250, 100], 2)
+    def show(self, screen):
+        pygame.draw.ellipse(screen, colours.WHITE, [self.x, self.y, 50, 50], 2)
