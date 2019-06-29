@@ -24,6 +24,9 @@ class Vector:
     def bearing(self):
         return math.atan2(self.x, self.y)
 
+    def distance_to(self, other):
+        return math.sqrt(self.quadrance_to(other))
+
     def quadrance_to(self, other):
         dx = self.x - other.x
         dy = self.y - other.y

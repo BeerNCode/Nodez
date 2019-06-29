@@ -5,16 +5,16 @@ import pygame
 import nodes
 import vector
 import colours
+import program
 from tools import *
 from vector import Vector
 from nodes import Node
 
 logger = logging.getLogger(__name__)
 
-PLAYER_SPEED = 1
-PLAYER_RADIUS = 50
-
-NODE_COOLDOWN = 50
+PLAYER_SPEED = 2
+PLAYER_RADIUS = 10
+NODE_COOLDOWN = 100
 
 class Player:
 
@@ -23,8 +23,7 @@ class Player:
         self.name = name
         self.team = team
         self.controls = controls
-        self.pos = vector.Vector(0, 0)
-        self.key_left = False
+        self.pos = vector.Vector(self.team.node.pos.x, self.team.node.pos.y)
         self.node = None
         self.node_cooldown = 0
         self.node_ready = True
@@ -39,6 +38,10 @@ class Player:
 
     def update(self, nodes):
         self.capture_inputs()
+        
+        speed = PLAYER_SPEED
+        if self.node is not None:
+            speed *= 0.8
 
         if self.key_left:
             self.pos.x -= PLAYER_SPEED
@@ -49,6 +52,15 @@ class Player:
         elif self.key_down:
             self.pos.y += PLAYER_SPEED
 
+        if self.pos.x < PLAYER_RADIUS*0.5:
+            self.pos.x = PLAYER_RADIUS*0.5
+        if self.pos.y < PLAYER_RADIUS*0.5:
+            self.pos.y = PLAYER_RADIUS*0.5
+        if self.pos.x > program.SCREEN_WIDTH - PLAYER_RADIUS*0.5:
+            self.pos.x = program.SCREEN_WIDTH - PLAYER_RADIUS*0.5
+        if self.pos.y > program.SCREEN_HEIGHT - PLAYER_RADIUS*0.5:
+            self.pos.y = program.SCREEN_HEIGHT - PLAYER_RADIUS*0.5
+
         if self.node_ready:
             if self.key_space:
                 if self.node is not None:
@@ -56,12 +68,16 @@ class Player:
                     self.node.pos.y = self.pos.y
                     self.node.is_placed = True
                     self.node.update_links(nodes)
+                    self.node.energy = 0
                     self.node = None
                     self.node_ready = False
                     self.node_cooldown = NODE_COOLDOWN
 
                 else:
                     for node in nodes:
+                        if node.is_fixed:
+                            continue
+
                         if node.pos.quadrance_to(self.pos) < PLAYER_RADIUS * PLAYER_RADIUS:
                             self.node = node
                             self.node.team = self.team

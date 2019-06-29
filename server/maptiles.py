@@ -1,6 +1,8 @@
 import pygame
+import os
 import spritesheet
 from tile import Tile
+
 OPEN_TILE = 0
 HIGH_NOISE = 1
 SOURCE_TILE = 2
@@ -45,9 +47,10 @@ class MapTiles:
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight]
             ]
+
         self.height = 10
         self.width = 10
-    
+
     def show(self,screen):
         
         for row in range(self.height): 
