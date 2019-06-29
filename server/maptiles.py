@@ -22,7 +22,14 @@ TILESIZE = 32
 
 class MapTiles:
     def __init__(self):
-        self.tilesize = TILESIZE
+        self.rows = 10
+        self.columns = 10
+        self.height = self.rows * TILESIZE
+        self.width = self.columns * TILESIZE
+        self.map_surface = pygame.Surface((self.width, self.height))
+
+        grass_img = pygame.image.load('server\\resources\\grass-200.png')
+        grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
         ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
         blank = ss.image_at((0, 0, 32, 32))
         topLeft = ss.image_at((32, 32, 64, 64))
@@ -45,16 +52,10 @@ class MapTiles:
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight]
-            ]
+        ]
+        for row in range(self.rows): 
+            for col in range(self.columns):
+                self.map_surface.blit(self.tilemap[row][col], (col*TILESIZE,row*TILESIZE,TILESIZE,TILESIZE))
 
-        self.height = 10
-        self.width = 10
-
-    def show(self,screen):
-        
-        for row in range(self.height): 
-            for col in range(self.width):
-                screen.blit(self.tilemap[row][col], (col*self.tilesize,row*self.tilesize,self.tilesize,self.tilesize))
-                #Tile((col*self.tilesize,row*self.tilesize,self.tilesize,self.tilesize))
-                #pygame.draw.rect(screen,COLOURS[self.tilemap[row][col]],(col*self.tilesize,row*self.tilesize,self.tilesize,self.tilesize))
-                
+    def show(self, screen):
+        screen.blit(self.map_surface, (0, 0, self.width, self.height))
