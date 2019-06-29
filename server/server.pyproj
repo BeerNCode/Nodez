@@ -25,6 +25,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="program.py" />
+    <Compile Include="tile.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tools.py" />
     <Compile Include="__init__.py" />
     <Compile Include="__main__.py" />
@@ -41,7 +44,12 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\grass-1024.png" />
+    <Content Include="resources\grass-200.png" />
     <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
