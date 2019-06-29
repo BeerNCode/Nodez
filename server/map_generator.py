@@ -52,7 +52,10 @@ class MapGenerator:
         return featureTiles
     
     def get_direction(self):
-        return random.randint(0, 4)
+        if random.randint(0, 20)==0:
+            return 0
+        else:
+            return random.randint(1, 4)
 
     def transform_value(self, val):
         output = ''

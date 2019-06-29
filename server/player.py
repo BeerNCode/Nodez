@@ -1,3 +1,4 @@
+import os
 import logging
 import json
 import threading
@@ -7,6 +8,9 @@ import vector
 import colours
 import random
 import spritesheet
+import maptiles
+import math
+
 from entity import Entity
 from tools import *
 from vector import Vector
@@ -18,7 +22,7 @@ logger = logging.getLogger(__name__)
 PLAYER_SPEED = 3
 PLAYER_SPEED_PENALTY = 0.8
 NODE_HELD_DIAMETER = 15
-PLAYER_RADIUS = 24
+PLAYER_RADIUS = 15
 PLAYER_DIAMETER = 2 * PLAYER_RADIUS
 NODE_COOLDOWN = 10
 PICKUP_DISTANCE = PLAYER_RADIUS * PLAYER_RADIUS + nodes.NODE_RADIUS * nodes.NODE_RADIUS
@@ -52,7 +56,8 @@ class Player(Entity):
         offset = offsets[random.randint(0, len(offsets)-1)]
         logger.debug(f"offset is {offset}")
 
-        sheet = spritesheet.spritesheet('server\\resources\\player.png')
+        sheet = spritesheet.spritesheet(os.path.join('server', 'resources',
+            'player.png'))
         super().add_sprite("up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size))
         super().add_sprite("down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size))
         super().add_sprite("left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size))
@@ -65,11 +70,30 @@ class Player(Entity):
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
-        self.key_up = keys[self.controls["up"]]
-        self.key_down = keys[self.controls["down"]]
-        self.key_left = keys[self.controls["left"]]
-        self.key_right = keys[self.controls["right"]]
-        self.key_space = keys[self.controls["space"]]
+        if self.controls.joystick is not None:
+            joystick = self.controls.getGamepad()
+            hats = joystick.get_hat(0)
+            logger.debug(hats)
+            self.key_up = hats[1]==1
+            self.key_down = hats[1]==-1
+            self.key_left = hats[0]==-1
+            self.key_right = hats[0]==1
+            if (joystick.get_numbuttons()>2):
+                self.key_space = joystick.get_button( 1 )==1
+            else:
+                self.key_space = keys[self.controls.getKeys()["space"]]
+        elif self.controls.network is not None:
+            self.key_up = self.controls.network["state"].up
+            self.key_down = self.controls.network["state"].down
+            self.key_left = self.controls.network["state"].left
+            self.key_right = self.controls.network["state"].right
+            self.key_space = self.controls.network["state"].a
+        else:
+            self.key_up = keys[self.controls.getKeys()["up"]]
+            self.key_down = keys[self.controls.getKeys()["down"]]
+            self.key_left = keys[self.controls.getKeys()["left"]]
+            self.key_right = keys[self.controls.getKeys()["right"]]
+            self.key_space = keys[self.controls.getKeys()["space"]]
 
     def update(self, world, nodes):
         self.capture_inputs()
@@ -107,8 +131,11 @@ class Player(Entity):
             dx *= 0.717
             dy *= 0.717
 
-        self.pos.x += dx
-        self.pos.y += dy
+
+        if self.move(self.pos.x + dx, self.pos.y, world) :
+            self.pos.x += dx
+        if self.move(self.pos.x, self.pos.y + dy, world) : 
+            self.pos.y += dy
 
         if not movingHorizontally and not movingVertically:
             if self.direction == 0:
@@ -158,6 +185,34 @@ class Player(Entity):
             if self.node_cooldown <= 0:
                 self.node_ready = True
 
+    def move(self, x, y, world) :
+        row = []
+        row.append(math.floor((y - PLAYER_RADIUS/2)/ maptiles.TILESIZE))
+        row.append(math.floor((y + PLAYER_RADIUS/2)/ maptiles.TILESIZE))
+
+        column = []
+        column.append(math.floor((x - PLAYER_RADIUS/2)/ maptiles.TILESIZE))
+        column.append(math.floor((x + PLAYER_RADIUS/2)/ maptiles.TILESIZE))
+
+        for x in range(2):
+           if row[x] < 0 or row[x] >= len(world.access_map[0]):
+                return False
+           if column[x] < 0 or column[x] >= len(world.access_map):
+               return False
+
+        checkrow = 0
+
+        while checkrow < 2:
+            checkcolumn = 0
+            while checkcolumn < 2 :
+                if world.access_map[column[checkrow]][row[checkcolumn]] == 15:
+                    return False
+                checkcolumn += 1
+            checkrow +=1
+
+        return True
+
+        
     def show(self, screen):
         super().show()
         pygame.draw.rect(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS*0.6, self.pos.y+PLAYER_RADIUS, 2*PLAYER_RADIUS*0.6, 5], 0)

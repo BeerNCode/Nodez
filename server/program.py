@@ -13,7 +13,6 @@ from maptiles import MapTiles
 from nodes import Node
 from vector import Vector
 import random
-import game_modes
 from tools import *
 
 logging.basicConfig(level=logging.DEBUG)
@@ -27,18 +26,16 @@ NUMBER_OF_NODES = 20
 
 logger = logging.getLogger(__name__)
 
-class Program:
+class Game:
 
-    def __init__(self):
-        pygame.display.set_caption("Nodez")
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+    def __init__(self, screen, game_mode):
+        self.screen = screen
         self.teams = []
         self.players = []
         self.nodes = []
         self.clock = pygame.time.Clock()
         self.start_ticks=pygame.time.get_ticks()
-        
-        game_mode = game_modes.generate_basic(SCREEN_WIDTH, SCREEN_HEIGHT)
+
         for node in game_mode["nodes"]:
             self.nodes.append(node)
         for player in game_mode["players"]:
@@ -50,6 +47,7 @@ class Program:
 
     def run(self):
         while self.running:
+            pygame.event.pump()
             self.update_events()
             
             for player in self.players:
