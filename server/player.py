@@ -15,10 +15,12 @@ from nodes import Node
 
 logger = logging.getLogger(__name__)
 
-PLAYER_SPEED = 1
+PLAYER_SPEED = 3
+NODE_HELD_DIAMETER = 15
 PLAYER_RADIUS = 24
 PLAYER_DIAMETER = 2 * PLAYER_RADIUS
-NODE_COOLDOWN = 100
+NODE_COOLDOWN = 10
+PICKUP_DISTANCE = PLAYER_RADIUS * PLAYER_RADIUS + nodes.NODE_RADIUS * nodes.NODE_RADIUS
 
 class Player(Entity):
 
@@ -73,31 +75,45 @@ class Player(Entity):
         
         speed = PLAYER_SPEED
         if self.node is not None:
-            speed *= 0.8
+            speed *= 0.5
 
-        moving = False
+        dx = 0
+        dy = 0
+        movingVertically = False
+        movingHorizontally = False
         if self.key_up:
-            self.pos.y -= PLAYER_SPEED
+            logger.debug("key_up")
+            dy = -speed
             self.direction = 0
             super().set_sprite("walking_up")
-            moving = True
+            movingVertically = True
         elif self.key_down:
-            self.pos.y += PLAYER_SPEED
+            logger.debug("key_down")
+            dy = speed
             self.direction = 1
             super().set_sprite("walking_down")
-            moving = True
+            movingVertically = True
         if self.key_left:
-            self.pos.x -= PLAYER_SPEED
+            logger.debug("key_left")
+            dx = -speed                
             self.direction = 2
             super().set_sprite("walking_left")
-            moving = True
+            movingHorizontally = True
         elif self.key_right:
-            self.pos.x += PLAYER_SPEED
+            logger.debug("key_right")
+            dx = speed
             self.direction = 3
             super().set_sprite("walking_right")
-            moving = True
+            movingHorizontally = True
 
-        if not moving:
+        if movingHorizontally and movingVertically:
+            dx *= 0.717
+            dy *= 0.717
+
+        self.pos.x += dx
+        self.pos.y += dy
+
+        if not movingHorizontally and not movingVertically:
             if self.direction == 0:
                 super().set_sprite("up")
             elif self.direction == 1:
@@ -116,6 +132,9 @@ class Player(Entity):
         if self.pos.y > world.height - PLAYER_RADIUS*0.5:
             self.pos.y = world.height - PLAYER_RADIUS*0.5
 
+        if self.key_space:
+            logger.debug("key_space")
+
         if self.node_ready:
             if self.key_space:
                 if self.node is not None:
@@ -133,7 +152,7 @@ class Player(Entity):
                         if node.is_fixed:
                             continue
 
-                        if node.pos.quadrance_to(self.pos) < PLAYER_RADIUS * PLAYER_RADIUS:
+                        if node.pos.quadrance_to(self.pos) < PICKUP_DISTANCE:
                             self.node = node
                             self.node.team = self.team
                             self.node.is_placed = False
@@ -147,3 +166,6 @@ class Player(Entity):
 
     def show(self, screen):
         super().show()
+        pygame.draw.rect(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS*0.6, self.pos.y+PLAYER_RADIUS, 2*PLAYER_RADIUS*0.6, 5], 0)
+        if self.node is not None:
+            pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-NODE_HELD_DIAMETER*0.5, self.pos.y-PLAYER_RADIUS-NODE_HELD_DIAMETER-5, NODE_HELD_DIAMETER, NODE_HELD_DIAMETER], 0)
