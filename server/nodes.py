@@ -1,7 +1,9 @@
 import pygame
 import vector
 import colours
+import spritesheet
 from pygame import gfxdraw
+from entity import Entity
 
 NODE_RADIUS = 5
 NODE_RANGE = 100
@@ -13,9 +15,10 @@ DARK_GREY = (25, 25, 25)
 pygame.font.init()
 FONT = pygame.font.SysFont('Calibri', 12, True, False)
 
-class Node:
+class Node(Entity):
 
     def __init__(self, is_fixed, is_source, pos):
+        super().__init__()
         self.pos = vector.Vector(pos.x, pos.y)
         self.is_placed = True
         self.team = None
@@ -23,6 +26,11 @@ class Node:
         self.is_fixed = is_fixed
         self.links = set()
         self.energy = 0
+
+        tile_size = 32
+        sheet = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
+        super().add_sprite("on", sheet, (375, 260, tile_size, tile_size))
+        super().set_sprite("on")
 
     def update(self):
         if self.is_source:
@@ -65,6 +73,7 @@ class Node:
         self.links.remove(node)
 
     def show(self, screen):
+        super().show()
 
         if self.is_placed:
             if self.team is not None:
@@ -77,7 +86,8 @@ class Node:
             if self.is_fixed:
                 line_width = 0
 
-            pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RADIUS*0.5, self.pos.y-NODE_RADIUS*0.5, NODE_RADIUS, NODE_RADIUS], line_width)
+            #pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RADIUS*0.5, self.pos.y-NODE_RADIUS*0.5, NODE_RADIUS, NODE_RADIUS], line_width)
+            
             pygame.gfxdraw.aacircle(screen, int(self.pos.x), int(self.pos.y), int(NODE_RANGE*0.5), colour)
             screen.blit(FONT.render(f"{self.energy:.0f}", True, colours.WHITE), [self.pos.x, self.pos.y])
 

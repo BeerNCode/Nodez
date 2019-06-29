@@ -14,7 +14,7 @@ import random
 
 from tools import *
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 CLIENT_TIMEOUT = 1000
 SCREEN_WIDTH = 1024
@@ -94,14 +94,18 @@ class Program:
     def render(self):
         self.screen.fill(colours.LIGHT_GREY)
         player_sprites = pygame.sprite.Group()
+        node_sprites = pygame.sprite.Group()
 
         self.world.show(self.screen)
         for player in self.players:
             player.show(self.screen)
             player_sprites.add(player)
         for node in self.nodes:
-            node.show(self.screen)
+            if node.is_placed:
+                node_sprites.add(node)
+                node.show(self.screen)
         player_sprites.draw(self.screen)
+        node_sprites.draw(self.screen)
 
     def update_timer(self):
         seconds=(pygame.time.get_ticks()-self.start_ticks)/1000 

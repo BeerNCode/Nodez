@@ -6,11 +6,12 @@ import nodes
 import vector
 import colours
 import random
+import spritesheet
+from entity import Entity
 from tools import *
 from vector import Vector
 from nodes import Node
 
-import spritesheet
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ PLAYER_RADIUS = 24
 PLAYER_DIAMETER = 2 * PLAYER_RADIUS
 NODE_COOLDOWN = 100
 
-class Player(pygame.sprite.Sprite):
+class Player(Entity):
 
     def __init__(self, name, team, controls):
         super().__init__()
@@ -31,10 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.node = None
         self.node_cooldown = 0
         self.node_ready = True
-        self.sprite_index = 0
-        self.sprites = {}
         self.direction = 0
-        sheet = spritesheet.spritesheet('server\\resources\\player.png')
 
         tile_size = 32
         offsets = [
@@ -50,15 +48,17 @@ class Player(pygame.sprite.Sprite):
         
         offset = offsets[random.randint(0, len(offsets)-1)]
         logger.debug(f"offset is {offset}")
-        self.add_sprite("up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size))
-        self.add_sprite("down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size))
-        self.add_sprite("left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size))
-        self.add_sprite("right", sheet, (offset[0] + 0 * tile_size, offset[1] + 2 * tile_size, tile_size, tile_size))
-        self.add_sprites("walking_up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
-        self.add_sprites("walking_down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
-        self.add_sprites("walking_left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
-        self.add_sprites("walking_right", sheet, (offset[0] + 0 * tile_size, offset[1] + 2 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
-        self.set_sprite("down")
+
+        sheet = spritesheet.spritesheet('server\\resources\\player.png')
+        super().add_sprite("up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size))
+        super().add_sprite("down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size))
+        super().add_sprite("left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size))
+        super().add_sprite("right", sheet, (offset[0] + 0 * tile_size, offset[1] + 2 * tile_size, tile_size, tile_size))
+        super().add_sprites("walking_up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
+        super().add_sprites("walking_down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
+        super().add_sprites("walking_left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
+        super().add_sprites("walking_right", sheet, (offset[0] + 0 * tile_size, offset[1] + 2 * tile_size, tile_size, tile_size), 3, (tile_size, 0))
+        super().set_sprite("down")
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
@@ -67,28 +67,6 @@ class Player(pygame.sprite.Sprite):
         self.key_left = keys[self.controls["left"]]
         self.key_right = keys[self.controls["right"]]
         self.key_space = keys[self.controls["space"]]
-
-    def add_sprite(self, sprite_id, sheet, rectangle):
-        logger.debug(f"setting {sprite_id}")
-        logger.debug(rectangle)
-        sprite = sheet.image_at(rectangle)
-        sprite.set_colorkey((255, 255, 255))
-        self.sprites[sprite_id] = [sprite]
-
-    def add_sprites(self, sprite_id, sheet, rectangle, amount, offset):
-        sprites = []
-        logger.debug(f"setting {sprite_id}")
-        for i in range(amount):
-            r = (rectangle[0]+offset[0]*i, rectangle[1]+offset[1]*i,rectangle[2],rectangle[3])
-            logger.debug(r)
-            sprite = sheet.image_at(r)
-            sprite.set_colorkey((255, 255, 255))
-            sprites.append(sprite)
-        self.sprites[sprite_id] = sprites
-
-    def set_sprite(self, sprite_id):
-        logger.debug(f"setting sprite to {sprite_id}")
-        self.images = self.sprites[sprite_id]
 
     def update(self, world, nodes):
         self.capture_inputs()
@@ -101,33 +79,33 @@ class Player(pygame.sprite.Sprite):
         if self.key_up:
             self.pos.y -= PLAYER_SPEED
             self.direction = 0
-            self.set_sprite("walking_up")
+            super().set_sprite("walking_up")
             moving = True
         elif self.key_down:
             self.pos.y += PLAYER_SPEED
             self.direction = 1
-            self.set_sprite("walking_down")
+            super().set_sprite("walking_down")
             moving = True
         if self.key_left:
             self.pos.x -= PLAYER_SPEED
             self.direction = 2
-            self.set_sprite("walking_left")
+            super().set_sprite("walking_left")
             moving = True
         elif self.key_right:
             self.pos.x += PLAYER_SPEED
             self.direction = 3
-            self.set_sprite("walking_right")
+            super().set_sprite("walking_right")
             moving = True
 
         if not moving:
             if self.direction == 0:
-                self.set_sprite("up")
+                super().set_sprite("up")
             elif self.direction == 1:
-                self.set_sprite("down")
+                super().set_sprite("down")
             elif self.direction == 2:
-                self.set_sprite("left")
+                super().set_sprite("left")
             elif self.direction == 3:
-                self.set_sprite("right")
+                super().set_sprite("right")
 
         if self.pos.x < PLAYER_RADIUS*0.5:
             self.pos.x = PLAYER_RADIUS*0.5
@@ -168,17 +146,4 @@ class Player(pygame.sprite.Sprite):
                 self.node_ready = True
 
     def show(self, screen):
-
-        logger.debug(f"{self.sprite_index} in {len(self.images)}")
-        self.sprite_index += 1
-        if self.sprite_index >= len(self.images):
-            self.sprite_index = 0
-        self.image = self.images[self.sprite_index]
-        
-        self.rect = self.image.get_rect()
-        self.rect.x = (self.pos.x-self.rect.width/2)
-        self.rect.y = (self.pos.y-self.rect.height/2)
-        
-        #pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
-        #if self.node:
-        #    pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-nodes.NODE_RADIUS/2, self.pos.y-nodes.NODE_RADIUS/2, nodes.NODE_RADIUS, nodes.NODE_RADIUS], 2)
+        super().show()
