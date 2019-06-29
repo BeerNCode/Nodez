@@ -2,6 +2,7 @@ import pygame
 import os
 import spritesheet
 from tile import Tile
+from map_generator import MapGenerator
 
 OPEN_TILE = 0
 HIGH_NOISE = 1
@@ -41,6 +42,10 @@ class MapTiles:
         topRight = ss.image_at((32*6, 64, 32*6+32, 96))
         sideRight = ss.image_at((32*6, 32*4, 32*6+32, 32*4+32))
         bottomRight = ss.image_at((32*6, 32*6, 32*6+32, 32*6+32))
+
+        generator = map_generator.MapGenerator((self.width, self.height), TILESIZE)
+        tiles = generator.generate()
+
         self.tilemap = [
             [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
