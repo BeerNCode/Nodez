@@ -1,5 +1,7 @@
 import pygame
+import os
 from tile import Tile
+
 OPEN_TILE = 0
 HIGH_NOISE = 1
 SOURCE_TILE = 2
@@ -19,8 +21,8 @@ TILESIZE = 200
 
 class Map:
     tilesize = TILESIZE
-    grass_img = pygame.image.load('resources\grass-200.png')
-    grass_inv_img = pygame.image.load('resources\grass-inv-200.png')
+    grass_img = pygame.image.load(os.path.join('server', 'resources', 'grass-200.png'))
+    grass_inv_img = pygame.image.load(os.path.join('server', 'resources', 'grass-inv-200.png'))
     tilemap = [
         [grass_img,grass_img,grass_img],
         [grass_img,grass_inv_img,grass_img],

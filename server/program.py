@@ -21,14 +21,11 @@ SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
 GAME_SPEED = 30
 
-
 NUMBER_OF_NODES = 20
 
 logger = logging.getLogger(__name__)
 
 class Program:
-
-    screenSize = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
     def __init__(self):
         pygame.display.set_caption("Nodez")
@@ -90,8 +87,7 @@ class Program:
     def render(self):
         self.screen.fill(colours.BLACK)
 
-        
-        map.show(self.screen)
+        self.map.show(self.screen)
         for player in self.players:
             player.show(self.screen)
         for node in self.nodes:

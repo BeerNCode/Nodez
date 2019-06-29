@@ -1,5 +1,6 @@
 import pygame
 import vector
+import colours
 
 NODE_RADIUS = 5
 NODE_RANGE = 100
@@ -7,6 +8,9 @@ NODE_RANGE = 100
 RED = (255, 0, 0)
 DARK_RED = (100, 0, 0)
 DARK_GREY = (25, 25, 25)
+
+pygame.font.init()
+FONT = pygame.font.SysFont('Calibri', 12, True, False)
 
 class Node:
 
@@ -17,9 +21,21 @@ class Node:
         self.is_source = is_source
         self.is_fixed = is_fixed
         self.links = set()
+        self.energy = 0
 
     def update(self):
-        pass
+        if self.is_source:
+            self.energy += 1
+
+        for node in self.links:
+            if node.energy < self.energy and self.energy > 1:
+                rate = 50 / node.pos.distance_to(self.pos)
+                node.energy += rate
+                self.energy -= rate
+
+        if self.is_fixed and self.team is not None and self.energy > 0:
+            self.team.energy += 1
+            self.energy -= 1
 
     def update_links(self, nodes):
         for node in self.links:
@@ -61,6 +77,8 @@ class Node:
 
             pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RADIUS*0.5, self.pos.y-NODE_RADIUS*0.5, NODE_RADIUS, NODE_RADIUS], line_width)
             pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RANGE*0.5, self.pos.y-NODE_RANGE*0.5, NODE_RANGE, NODE_RANGE], 2)
+
+            screen.blit(FONT.render(f"{self.energy:.0f}", True, colours.WHITE), [self.pos.x, self.pos.y])
 
             for node in self.links:
                 if node.is_placed:

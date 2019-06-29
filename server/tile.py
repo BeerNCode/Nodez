@@ -1,9 +1,6 @@
-
 import pygame
 
-
 GRASS_TILE = None
-
 
 class Tile(pygame.sprite.Sprite):
     
