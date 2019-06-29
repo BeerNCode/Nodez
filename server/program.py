@@ -37,7 +37,8 @@ class Program:
         self.nodes = []
         self.clock = pygame.time.Clock()
         self.start_ticks=pygame.time.get_ticks()
-        
+        pygame.joystick.init()
+
         game_mode = game_modes.generate_basic(SCREEN_WIDTH, SCREEN_HEIGHT)
         for node in game_mode["nodes"]:
             self.nodes.append(node)
@@ -50,6 +51,7 @@ class Program:
 
     def run(self):
         while self.running:
+            pygame.event.pump()
             self.update_events()
             
             for player in self.players:

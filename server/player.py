@@ -8,6 +8,9 @@ import vector
 import colours
 import random
 import spritesheet
+import maptiles
+import math
+
 from entity import Entity
 from tools import *
 from vector import Vector
@@ -67,11 +70,24 @@ class Player(Entity):
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
-        self.key_up = keys[self.controls["up"]]
-        self.key_down = keys[self.controls["down"]]
-        self.key_left = keys[self.controls["left"]]
-        self.key_right = keys[self.controls["right"]]
-        self.key_space = keys[self.controls["space"]]
+        if (self.controls.hasGamepad()):
+            joystick = self.controls.getGamepad()
+            hats = joystick.get_hat(0)
+            logger.debug(hats)
+            self.key_up = hats[1]==1
+            self.key_down = hats[1]==-1
+            self.key_left = hats[0]==-1
+            self.key_right = hats[0]==1
+            if (joystick.get_numbuttons()>2):
+                self.key_space = joystick.get_button( 1 )==1
+            else:
+                self.key_space = keys[self.controls.getKeys()["space"]]
+        else:
+            self.key_up = keys[self.controls.getKeys()["up"]]
+            self.key_down = keys[self.controls.getKeys()["down"]]
+            self.key_left = keys[self.controls.getKeys()["left"]]
+            self.key_right = keys[self.controls.getKeys()["right"]]
+            self.key_space = keys[self.controls.getKeys()["space"]]
 
     def update(self, world, nodes):
         self.capture_inputs()
@@ -109,8 +125,11 @@ class Player(Entity):
             dx *= 0.717
             dy *= 0.717
 
-        self.pos.x += dx
-        self.pos.y += dy
+
+        if self.move(self.pos.x + dx, self.pos.y, world) :
+            self.pos.x += dx
+        if self.move(self.pos.x, self.pos.y + dy, world) : 
+            self.pos.y += dy
 
         if not movingHorizontally and not movingVertically:
             if self.direction == 0:
@@ -160,6 +179,43 @@ class Player(Entity):
             if self.node_cooldown <= 0:
                 self.node_ready = True
 
+    def move(self, x, y, world) :
+        row = []
+        row.append(math.floor((y - maptiles.TILESIZE)/ maptiles.TILESIZE))
+        row.append(math.floor((y + maptiles.TILESIZE)/ maptiles.TILESIZE))
+
+        column = []
+        column.append(math.floor((x - maptiles.TILESIZE)/ maptiles.TILESIZE))
+        column.append(math.floor((x + maptiles.TILESIZE)/ maptiles.TILESIZE))
+
+        # leng(world.access_map[0]) gives column (32)
+        # len (world.access_map) gives rows (24)
+        logger.info(f"Array size {len(world.access_map[0])} and {len(world.access_map)}")
+        logger.info(f"Value of rows {row[0]} and {row[1]}")
+        logger.info(f"Value of columns {column[0]} and {column[1]}")
+
+        for x in range(2):
+           if row[x] < 0 or row[x] >= len(world.access_map[0]):
+                logger.info("out of limits row")
+                return False
+           if column[x] < 0 or column[x] >= len(world.access_map):
+               logger.info("out of limits column")
+               return False
+
+        checkrow = 0
+
+        while checkrow < 2:
+            checkcolumn = 0
+            while checkcolumn < 2 :
+                if world.access_map[column[checkrow]][row[checkcolumn]] == 15:
+                    logger.info("move prevented")
+                    return False
+                checkcolumn += 1
+            checkrow +=1
+
+        return True
+
+        
     def show(self, screen):
         super().show()
         pygame.draw.rect(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS*0.6, self.pos.y+PLAYER_RADIUS, 2*PLAYER_RADIUS*0.6, 5], 0)

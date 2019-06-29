@@ -21,7 +21,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="colours.py" />
+    <Compile Include="conftest.py" />
+    <Compile Include="controls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="entity.py" />
+    <Compile Include="game_modes.py" />
     <Compile Include="maptiles.py">
       <SubType>Code</SubType>
     </Compile>
