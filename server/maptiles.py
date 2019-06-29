@@ -55,9 +55,7 @@ class MapTiles:
         leftRightBridge = ss.image_at((264, 64, 32, 32),(255,255,255))
         leftBlock = ss.image_at((64, 256, 32, 32),(255,255,255))
         topBottomBridge = ss.image_at((280, 340, 32, 32),(255,255,255))
-        self.accessMap = [
-            
-            ]
+        self.accessMap = accessMap
 
         self.tilemap = [[0] * self.columns for _ in range(self.rows)]
         for row in range(self.rows): 
