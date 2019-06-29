@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.DEBUG)
 CLIENT_TIMEOUT = 1000
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
-GAME_SPEED = 30
+GAME_SPEED = 60
 
 NUMBER_OF_NODES = 20
 
@@ -34,6 +34,7 @@ class Program:
         self.players = []
         self.nodes = []
         self.world = MapTiles()
+        self.clock = pygame.time.Clock()
         teamA = Team("Sharks", (0, 0, 255))
         teamB = Team("Tigers", (0, 255, 0))
         self.teams.append(teamA)
@@ -75,6 +76,8 @@ class Program:
             pygame.display.flip()
 
             self.update_timer()
+
+            self.clock.tick(GAME_SPEED)
 
     def update_events(self):
         for event in pygame.event.get():
