@@ -56,8 +56,7 @@ class Player(Entity):
         offset = offsets[random.randint(0, len(offsets)-1)]
         logger.debug(f"offset is {offset}")
 
-        sheet = spritesheet.spritesheet(os.path.join('server', 'resources',
-            'player.png'))
+        sheet = spritesheet.spritesheet(os.path.join('server', 'resources','player.png'))
         super().add_sprite("up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size))
         super().add_sprite("down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size))
         super().add_sprite("left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size))
@@ -71,9 +70,8 @@ class Player(Entity):
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
         if self.controls.joystick is not None:
-            joystick = self.controls.getGamepad()
+            joystick = self.controls.joystick
             hats = joystick.get_hat(0)
-            logger.debug(hats)
             self.key_up = hats[1]==1
             self.key_down = hats[1]==-1
             self.key_left = hats[0]==-1
@@ -89,11 +87,11 @@ class Player(Entity):
             self.key_right = self.controls.network["state"].right
             self.key_space = self.controls.network["state"].a
         else:
-            self.key_up = keys[self.controls.getKeys()["up"]]
-            self.key_down = keys[self.controls.getKeys()["down"]]
-            self.key_left = keys[self.controls.getKeys()["left"]]
-            self.key_right = keys[self.controls.getKeys()["right"]]
-            self.key_space = keys[self.controls.getKeys()["space"]]
+            self.key_up = keys[self.controls.keys["up"]]
+            self.key_down = keys[self.controls.keys["down"]]
+            self.key_left = keys[self.controls.keys["left"]]
+            self.key_right = keys[self.controls.keys["right"]]
+            self.key_space = keys[self.controls.keys["space"]]
 
     def update(self, world, nodes):
         self.capture_inputs()

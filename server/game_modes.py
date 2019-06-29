@@ -18,7 +18,7 @@ number_of_players = 4
 
 
 
-def generate_basic(width, height, actual_players):
+def generate_basic(width, height, controls):
     
     # numX = int(math.ceil(width/32.0))
     # numY = int(math.ceil(height/32.0))

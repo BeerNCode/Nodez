@@ -3,7 +3,7 @@ import pygame
 
 class Controls():
 
-    def __init__(self,controls,joystick,network):
+    def __init__(self,keys,joystick,network):
         self.joystick = joystick
-        self.controls = controls
+        self.keys = keys
         self.network = network

@@ -35,7 +35,7 @@ class Game:
         self.nodes = []
         self.clock = pygame.time.Clock()
         self.start_ticks=pygame.time.get_ticks()
-
+        
         for node in game_mode["nodes"]:
             self.nodes.append(node)
         for player in game_mode["players"]:
@@ -44,8 +44,14 @@ class Game:
             self.teams.append(team)
         self.world = game_mode["world"]
         self.running = True
+        
+
+    def text_objects(self,text, font):
+        textSurface = font.render(text, True, (0,0,0))
+        return textSurface, textSurface.get_rect()
 
     def run(self):
+
         while self.running:
             pygame.event.pump()
             self.update_events()
@@ -54,8 +60,8 @@ class Game:
                 player.update(self.world, self.nodes)
             for node in self.nodes:
                 node.update()
-
             self.render()
+            
             self.update_timer()
             pygame.display.flip()
             self.clock.tick(GAME_SPEED)

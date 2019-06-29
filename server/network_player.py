@@ -24,7 +24,6 @@ def network_disconnect():
 @socketio.on('update')
 def client_update(controller_state):
     client_id = request.sid
-    logger.debug(controller_state)
     players[client_id]["state"] = controller_state
 
 def run_thread():
