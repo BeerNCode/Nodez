@@ -5,15 +5,16 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 
 @socketio.on('connect')
-def network_connect():
+def network_connect(sid):
     print("client has connected")
 
 @socketio.on('disconnect')
-def network_disconnect():
+def network_disconnect(sid, ):
     print("client has disconnected")
 
 @socketio.on('update')
-def client_update(controller_state):
+def client_update(sid, controller_state):
+    print(sid)
     print(controller_state)
 
 if __name__ == '__main__':
