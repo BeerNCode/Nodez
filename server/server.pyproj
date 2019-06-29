@@ -24,6 +24,7 @@
     <Compile Include="maptiles.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="map_generator.py" />
     <Compile Include="network_player.py" />
     <Compile Include="nodes.py" />
     <Compile Include="player.py" />
