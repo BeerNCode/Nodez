@@ -12,7 +12,7 @@ from nodes import Node
 logger = logging.getLogger(__name__)
 
 PLAYER_SPEED = 2
-PLAYER_RADIUS = 10
+PLAYER_RADIUS = 30
 NODE_COOLDOWN = 100
 
 class Player:

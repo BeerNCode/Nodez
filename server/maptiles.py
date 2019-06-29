@@ -26,6 +26,7 @@ class MapTiles:
         self.columns = 10
         self.height = self.rows * TILESIZE
         self.width = self.columns * TILESIZE
+        self.map_surface = pygame.Surface((self.width, self.height))
 
         grass_img = pygame.image.load('server\\resources\\grass-200.png')
         grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
@@ -51,11 +52,9 @@ class MapTiles:
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight]
         ]
-
-    def show(self,screen):
         for row in range(self.rows): 
             for col in range(self.columns):
-                screen.blit(self.tilemap[row][col], (col*TILESIZE,row*TILESIZE,TILESIZE,TILESIZE))
-                #Tile((col*self.tilesize,row*self.tilesize,self.tilesize,self.tilesize))
-                #pygame.draw.rect(screen,COLOURS[self.tilemap[row][col]],(col*self.tilesize,row*self.tilesize,self.tilesize,self.tilesize))
-                
+                self.map_surface.blit(self.tilemap[row][col], (col*TILESIZE,row*TILESIZE,TILESIZE,TILESIZE))
+
+    def show(self, screen):
+        screen.blit(self.map_surface, (0, 0, self.width, self.height))
