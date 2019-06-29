@@ -111,9 +111,9 @@ class Player(Entity):
             dy *= 0.717
 
 
-        if self.move(self.pos.x + dx, 0, world) :
+        if self.move(self.pos.x + dx, self.pos.y, world) :
             self.pos.x += dx
-        if self.move(0, self.pos.y + dy, world) : 
+        if self.move(self.pos.x, self.pos.y + dy, world) : 
             self.pos.y += dy
 
         if not movingHorizontally and not movingVertically:
@@ -165,24 +165,37 @@ class Player(Entity):
                 self.node_ready = True
 
     def move(self, x, y, world) :
-        self.row = []
-        self.row.append(math.floor(y - maptiles.TILESIZE))
-        self.row.append(math.floor(y + maptiles.TILESIZE))
+        row = []
+        row.append(math.floor((y - maptiles.TILESIZE)/ maptiles.TILESIZE))
+        row.append(math.floor((y + maptiles.TILESIZE)/ maptiles.TILESIZE))
 
-        self.column = []
-        self.column.append(math.floor(x - maptiles.TILESIZE))
-        self.column.append(math.floor(x + maptiles.TILESIZE))
+        column = []
+        column.append(math.floor((x - maptiles.TILESIZE)/ maptiles.TILESIZE))
+        column.append(math.floor((x + maptiles.TILESIZE)/ maptiles.TILESIZE))
+
+        # leng(world.access_map[0]) gives column (32)
+        # len (world.access_map) gives rows (24)
+        logger.info(f"Array size {len(world.access_map[0])} and {len(world.access_map)}")
+        logger.info(f"Value of rows {row[0]} and {row[1]}")
+        logger.info(f"Value of columns {column[0]} and {column[1]}")
+
+        for x in range(2):
+           if row[x] < 0 or row[x] >= len(world.access_map[0]):
+                logger.info("out of limits row")
+                return False
+           if column[x] < 0 or column[x] >= len(world.access_map):
+               logger.info("out of limits column")
+               return False
 
         checkrow = 0
-        checkcolumn = 0
 
         while checkrow < 2:
+            checkcolumn = 0
             while checkcolumn < 2 :
-                if world.accessMap[checkrow][checkcolumn] == 15:
+                if world.access_map[column[checkrow]][row[checkcolumn]] == 15:
+                    logger.info("move prevented")
                     return False
                 checkcolumn += 1
-            if world.accessMap[checkrow][checkcolumn] == 15:
-                return False
             checkrow +=1
 
         return True
