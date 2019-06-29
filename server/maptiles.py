@@ -56,8 +56,8 @@ class MapTiles:
         leftBlock = ss.image_at((64, 256, 32, 32),(255,255,255))
         rightBlock = ss.image_at((96, 256, 32, 32),(255,255,255))
         topBottomBridge = ss.image_at((280, 340, 32, 32),(255,255,255))
-        barrelIcon = ss.image_at((392, 219, 32, 32),(255,255,255));
-        barrel = pygame.Surface((32,32)).convert();
+        barrelIcon = ss.image_at((392, 219, 32, 32),(255,255,255))
+        barrel = pygame.Surface((32,32)).convert()
         barrel.blit(centre, (0, 0, self.width, self.height))
         barrel.blit(barrelIcon, (0, 0, self.width, self.height))
 
