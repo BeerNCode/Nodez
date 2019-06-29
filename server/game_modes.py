@@ -1,6 +1,7 @@
 import colours
 import random
 import pygame
+import math
 import map_generator
 import maptiles
 from vector import Vector
@@ -21,9 +22,19 @@ CONTROLS = [
 ]
 
 def generate_basic(width, height):
-    mapGen = map_generator.MapGenerator((width, height), maptiles.TILESIZE)
-    block_map = mapGen.generate_block_map(5)
-    world = maptiles.MapTiles(block_map, mapGen.numX, mapGen.numY)
+
+    #mapGen = map_generator.MapGenerator((width, height), maptiles.TILESIZE)
+    #block_map = mapGen.generate_block_map(5)
+    
+    numX = int(math.ceil(width/32.0))
+    numY = int(math.ceil(height/32.0))
+    block_map = [[0] * numY for _ in range(numX)]
+    for i in range(numX):
+        for j in range(numY):
+            if random.random() > 0.8:
+                block_map[i][j] = -1
+    
+    world = maptiles.MapTiles(block_map, numX, numY)
 
     teams = []
     nodes = []
