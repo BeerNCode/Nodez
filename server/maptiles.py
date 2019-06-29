@@ -39,9 +39,12 @@ class MapTiles:
         self.block_map = block_map
         self.generate_access_map()
 
-        grass_img = pygame.image.load('server\\resources\\grass-200.png')
-        grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
-        ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
+        grass_img = pygame.image.load(os.path.join('server', 'resources',
+            'grass-200.png'))
+        grass_inv_img = pygame.image.load(os.path.join('server', 'resources',
+            'grass-inv-200.png'))
+        ss = spritesheet.spritesheet(os.path.join('server', 'resources',
+            'dungeon_tiles.png'))
         self.blank = ss.image_at((0, 0, 32, 32),(255,255,255))
         self.topLeft = ss.image_at((64, 64, 32, 32),(255,255,255))
         self.sideLeft = ss.image_at((64, 96, 32, 32),(255,255,255))

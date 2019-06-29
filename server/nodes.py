@@ -1,3 +1,4 @@
+import os 
 import pygame
 import vector
 import colours
@@ -29,7 +30,8 @@ class Node(Entity):
         self.energy = 0
 
         tile_size = 32
-        sheet = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
+        sheet = spritesheet.spritesheet(os.path.join('server', 'resources',
+            'dungeon_tiles.png'))
         super().add_sprite("flicker_left", sheet, (383, 262, 16, 40))
         super().add_sprite("flicker_right", sheet, (414, 262, 16, 40))
         super().set_sprite("flicker_left")

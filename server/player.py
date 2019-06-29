@@ -1,3 +1,4 @@
+import os
 import logging
 import json
 import threading
@@ -52,7 +53,8 @@ class Player(Entity):
         offset = offsets[random.randint(0, len(offsets)-1)]
         logger.debug(f"offset is {offset}")
 
-        sheet = spritesheet.spritesheet('server\\resources\\player.png')
+        sheet = spritesheet.spritesheet(os.path.join('server', 'resources',
+            'player.png'))
         super().add_sprite("up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size))
         super().add_sprite("down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size))
         super().add_sprite("left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size))
