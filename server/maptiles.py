@@ -6,17 +6,17 @@ from tile import Tile
 XXXX = 0
 XXXO = 1
 XXOX = 2
-XXOX = 3
 XXOO = 4
-XOXO = 5
-XOOX = 6
+XOXX = 5
+XOXO = 6
+XOOX = 7
 XOOO = 7
-OXXO = 8
-OXOX = 9
+OXXX = 8
+OXXO = 9
 OXOX = 10
 OXOO = 11
-OOXO = 12
-OOOX = 13
+OOXX = 12
+OOXO = 13
 OOOX = 14
 OOOO = 15
 
@@ -76,5 +76,35 @@ class MapTiles:
         screen.blit(self.map_surface, (0, 0, self.width, self.height))
 
     def lookupTile(self,row,col):
-        if (self.accessMap):
-            return
+        if (self.accessMap[row][col]==XXXX):
+            return self.blank
+        if (self.accessMap[row][col]==XXXO):
+            return self.blank
+        if (self.accessMap[row][col]==XXOX):
+            return self.blank
+        if (self.accessMap[row][col]==XXOO):
+            return self.blank
+        if (self.accessMap[row][col]==XOXX):
+            return self.blank
+        if (self.accessMap[row][col]==XOXO):
+            return self.blank
+        if (self.accessMap[row][col]==XOOX):
+            return self.topLeft
+        if (self.accessMap[row][col]==XOOO):
+            return self.blank
+        if (self.accessMap[row][col]==OXXX):
+            return self.blank
+        if (self.accessMap[row][col]==OXXO):
+            return self.blank
+        if (self.accessMap[row][col]==OXOX):
+            return self.blank
+        if (self.accessMap[row][col]==OXOO):
+            return self.sideLeft
+        if (self.accessMap[row][col]==OOXX):
+            return self.bottomLeft
+        if (self.accessMap[row][col]==OOXO):
+            return self.bottomCentre
+        if (self.accessMap[row][col]==OOOX):
+            return self.blank
+        if (self.accessMap[row][col]==OOOO):
+            return self.blank
