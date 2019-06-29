@@ -44,6 +44,7 @@ class Program:
             y = random.random() * SCREEN_HEIGHT
             self.nodes.append(Node(Vector(x, y)))
 
+        self.start_ticks=pygame.time.get_ticks()
         self.players.append(Player("Dave",self.teams[0],{"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
         self.players.append(Player("Tom",self.teams[1], {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_g}))
         self.running = True
@@ -61,8 +62,10 @@ class Program:
                 node.update()
 
             self.render()
-
+      
             pygame.display.flip()
+
+            self.update_timer()
 
     def update_events(self):
         for event in pygame.event.get():
@@ -84,3 +87,8 @@ class Program:
             player.show(self.screen)
         for node in self.nodes:
             node.show(self.screen)
+
+    def update_timer(self):
+        seconds=(pygame.time.get_ticks()-self.start_ticks)/1000 
+        if seconds>100: 
+            self.running = False
