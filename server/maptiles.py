@@ -54,7 +54,13 @@ class MapTiles:
         bottomEdge = ss.image_at((32*6, 32*7, 32, 32),(255,255,255))
         leftRightBridge = ss.image_at((264, 64, 32, 32),(255,255,255))
         leftBlock = ss.image_at((64, 256, 32, 32),(255,255,255))
+        rightBlock = ss.image_at((96, 256, 32, 32),(255,255,255))
         topBottomBridge = ss.image_at((280, 340, 32, 32),(255,255,255))
+        barrelIcon = ss.image_at((392, 219, 32, 32),(255,255,255));
+        barrel = pygame.Surface((32,32)).convert();
+        barrel.blit(centre, (0, 0, self.width, self.height))
+        barrel.blit(barrelIcon, (0, 0, self.width, self.height))
+        
         self.accessMap = [
             
             ]
@@ -88,7 +94,7 @@ class MapTiles:
                 else:
                     self.tilemap[row][col] = centre
                 continue
-        self.tilemap[5][5] = leftBlock
+        self.tilemap[5][5] = barrel
 
         for row in range(self.rows): 
             for col in range(self.columns):
@@ -99,9 +105,16 @@ class MapTiles:
 
     def lookupTile(self,row,col):
         if (self.accessMap[row][col]==XXXX):
+            if (row>0 and row < self.rows-1 and col >0 and col < self.cols-1):
+                if (self.accessMap[row-1][col-1]==OOOO and self.accessMap[row-1][col]==OOOO and self.accessMap[row-1][col+1]==OOOO and
+                    self.accessMap[row][col-1]==OOOO and self.accessMap[row][col+1]==OOOO and
+                    self.accessMap[row+1][col-1]==OOOO and self.accessMap[row+1][col]==OOOO and self.accessMap[row+1][col+1]==OOOO):
+                    return self.barrel
+            if (row>0 and self.accessMap[row-1][col]!=XXXX):
+                return self.bottomEdge
             return self.blank
         if (self.accessMap[row][col]==XXXO):
-            return self.blank
+            return self.rightBlock
         if (self.accessMap[row][col]==XXOX):
             return self.blank
         if (self.accessMap[row][col]==XXOO):
