@@ -5,6 +5,9 @@ import threading
 import logging
 import colours
 import nodes
+
+import maptiles
+import map_generator
 from team import Team
 from player import Player
 from maptiles import MapTiles
@@ -33,7 +36,12 @@ class Program:
         self.teams = []
         self.players = []
         self.nodes = []
-        self.world = MapTiles()
+
+        mapGen = map_generator.MapGenerator((SCREEN_WIDTH, SCREEN_HEIGHT),maptiles.TILESIZE)
+        blockMap = mapGen.generate_block_map(5)
+        accessMap = mapGen.generate_access_map(blockMap)
+
+        self.world = MapTiles(accessMap)
         self.clock = pygame.time.Clock()
         teamA = Team("Sharks", (0, 0, 255))
         teamB = Team("Tigers", (0, 255, 0))

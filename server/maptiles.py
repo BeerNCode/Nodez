@@ -3,22 +3,22 @@ import os
 import spritesheet
 from tile import Tile
 #TRDL
-XXXX = 0
-XXXO = 1
-XXOX = 2
-XXOO = 4
-XOXX = 5
-XOXO = 6
-XOOX = 7
-XOOO = 7
-OXXX = 8
-OXXO = 9
-OXOX = 10
-OXOO = 11
-OOXX = 12
-OOXO = 13
-OOOX = 14
-OOOO = 15
+XXXX = 15
+XXXO = 14
+XXOX = 13
+XXOO = 12
+XOXX = 11
+XOXO = 10
+XOOX = 9
+XOOO = 8
+OXXX = 7
+OXXO = 6
+OXOX = 5
+OXOO = 4
+OOXX = 3
+OOXO = 2
+OOOX = 1
+OOOO = 0
 
 
 SOURCE_TILE = 2
@@ -31,7 +31,7 @@ RED = (255,40,55)
 TILESIZE = 32
 
 class MapTiles:
-    def __init__(self):
+    def __init__(self, accessMap):
         self.rows = 20
         self.columns = 30
         self.height = self.rows * TILESIZE
@@ -55,9 +55,8 @@ class MapTiles:
         leftRightBridge = ss.image_at((264, 64, 264+32, 96))
         leftBlock = ss.image_at((64, 256, 96, 256+32))
         topBottomBridge = ss.image_at((280, 340, 280+31, 340+32))
-        self.accessMap = [
-            
-            ]
+        self.accessMap = accessMap
+        
         self.tilemap = [[0] * self.columns for _ in range(self.rows)]
         for row in range(self.rows): 
             for col in range(self.columns):
