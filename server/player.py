@@ -22,8 +22,7 @@ class Player:
         self.name = name
         self.team = team
         self.controls = controls
-        self.pos = vector.Vector(0, 0)
-        self.key_left = False
+        self.pos = vector.Vector(self.team.node.pos.x, self.team.node.pos.y)
         self.node = None
         self.node_cooldown = 0
         self.node_ready = True

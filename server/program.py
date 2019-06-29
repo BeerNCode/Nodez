@@ -52,7 +52,7 @@ class Program:
         self.teams = []
         self.players = []
         self.nodes = []
-
+        self.map = Map()
         teamA = Team("Sharks", (0, 0, 255))
         teamB = Team("Tigers", (0, 255, 0))
         self.teams.append(teamA)
@@ -72,7 +72,7 @@ class Program:
             y = random.random() * SCREEN_HEIGHT
             self.nodes.append(Node(False,False,Vector(x, y)))
 
-        self.players.append(Player("Dave",self.teams[0],{"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
+        self.players.append(Player("Dave",self.teams[0], {"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
         self.players.append(Player("Tom",self.teams[1], {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_g}))
         self.running = True
 
@@ -87,8 +87,6 @@ class Program:
                 player.update(self.nodes)
             for node in self.nodes:
                 node.update()
-
-
 
             self.render()
 
@@ -108,7 +106,7 @@ class Program:
     def render(self):
         self.screen.fill(colours.BLACK)
 
-        map = Map()
+        
         map.show(self.screen)
         for player in self.players:
             player.show(self.screen)
