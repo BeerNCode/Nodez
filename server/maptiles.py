@@ -32,22 +32,22 @@ class MapTiles:
         grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
         ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
         blank = ss.image_at((0, 0, 32, 32))
-        topLeft = ss.image_at((32, 32, 64, 64))
-        sideLeft = ss.image_at((32, 64, 64, 96))
-        bottomLeft = ss.image_at((32, 96, 64, 128))
-        topCentre = ss.image_at((64, 32, 96, 64))
-        centre = ss.image_at((64, 64, 96, 96))
-        bottomCentre = ss.image_at((64, 96, 96, 128))
-        topRight = ss.image_at((96, 32, 128, 64))
-        sideRight = ss.image_at((96, 64, 128, 96))
-        bottomRight = ss.image_at((96, 96, 128, 128))
+        topLeft = ss.image_at((64, 64, 96, 96))
+        sideLeft = ss.image_at((64, 96, 96, 128))
+        bottomLeft = ss.image_at((64, 32*6, 96, 32*6+32))
+        topCentre = ss.image_at((96, 64, 128, 96))
+        centre = ss.image_at((96, 32*4, 128, 32*4+32))
+        bottomCentre = ss.image_at((96, 32*6, 128, 32*6+32))
+        topRight = ss.image_at((32*6, 64, 32*6+32, 96))
+        sideRight = ss.image_at((32*6, 32*4, 32*6+32, 32*4+32))
+        bottomRight = ss.image_at((32*6, 32*6, 32*6+32, 32*6+32))
         self.tilemap = [
             [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,sideRight,bottomCentre,bottomCentre,bottomCentre,sideLeft,centre,sideRight],
-            [sideLeft,centre,centre,sideRight,blank,blank,blank,sideLeft,centre,sideRight],
-            [sideLeft,centre,centre,centre,topCentre,topCentre,topCentre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
