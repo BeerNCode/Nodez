@@ -37,8 +37,49 @@ class Program:
         self.nodes = []
         self.clock = pygame.time.Clock()
         self.start_ticks=pygame.time.get_ticks()
+        self.setup = False
+        self.selected = "Start"
+        self.playersWaiting = {
+            "total":4,
+            "remote":0,
+            "joysticks":pygame.joystick.get_count()
+        }
         pygame.joystick.init()
-
+        i = 0
+        while not self.setup:
+            pygame.event.pump()
+            self.update_events()
+            
+            if not self.setup:
+                pygame.joystick.quit()
+                pygame.joystick.init()
+                self.playersWaiting["joysticks"]=pygame.joystick.get_count()
+                self.screen.fill((i%255,i*2%255,i*3%255))
+                i = i + 1
+                smallText = pygame.font.Font('freesansbold.ttf',50)
+                largeText = pygame.font.Font('freesansbold.ttf',115)
+                largerText = pygame.font.Font('freesansbold.ttf',200)
+                TextSurf, TextRect = self.text_objects("Node", largeText)
+                TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
+                self.screen.blit(TextSurf, TextRect)
+                TextSurf, TextRect = self.text_objects("z", largeText)
+                TextRect.center = ((SCREEN_WIDTH/2)+200,(SCREEN_HEIGHT/2)+50)
+                self.screen.blit(TextSurf, TextRect)
+                TextSurf, TextRect = self.text_objects(f'Total Required: {self.playersWaiting["total"]}', smallText)
+                TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2)+200)
+                self.screen.blit(TextSurf, TextRect)
+                TextSurf, TextRect = self.text_objects(f'Joysticks Connected: {self.playersWaiting["joysticks"]}', smallText)
+                TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2)+250)
+                self.screen.blit(TextSurf, TextRect)
+                TextSurf, TextRect = self.text_objects(f'Remote Connected: {self.playersWaiting["remote"]}', smallText)
+                TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2)+300)
+                self.screen.blit(TextSurf, TextRect)
+                keys = pygame.key.get_pressed()
+                if (keys[pygame.K_SPACE]):
+                   self.setup = True
+            self.update_timer()
+            pygame.display.flip()
+            self.clock.tick(GAME_SPEED)
         game_mode = game_modes.generate_basic(SCREEN_WIDTH, SCREEN_HEIGHT)
         for node in game_mode["nodes"]:
             self.nodes.append(node)
@@ -48,8 +89,14 @@ class Program:
             self.teams.append(team)
         self.world = game_mode["world"]
         self.running = True
+        
+
+    def text_objects(self,text, font):
+        textSurface = font.render(text, True, (0,0,0))
+        return textSurface, textSurface.get_rect()
 
     def run(self):
+
         while self.running:
             pygame.event.pump()
             self.update_events()
@@ -58,8 +105,8 @@ class Program:
                 player.update(self.world, self.nodes)
             for node in self.nodes:
                 node.update()
-
             self.render()
+            
             self.update_timer()
             pygame.display.flip()
             self.clock.tick(GAME_SPEED)
