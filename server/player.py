@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 PLAYER_SPEED = 3
 PLAYER_SPEED_PENALTY = 0.8
 NODE_HELD_DIAMETER = 15
-PLAYER_RADIUS = 24
+PLAYER_RADIUS = 15
 PLAYER_DIAMETER = 2 * PLAYER_RADIUS
 NODE_COOLDOWN = 10
 PICKUP_DISTANCE = PLAYER_RADIUS * PLAYER_RADIUS + nodes.NODE_RADIUS * nodes.NODE_RADIUS
@@ -181,12 +181,12 @@ class Player(Entity):
 
     def move(self, x, y, world) :
         row = []
-        row.append(math.floor((y - maptiles.TILESIZE)/ maptiles.TILESIZE))
-        row.append(math.floor((y + maptiles.TILESIZE)/ maptiles.TILESIZE))
+        row.append(math.floor((y - PLAYER_RADIUS/2)/ maptiles.TILESIZE))
+        row.append(math.floor((y + PLAYER_RADIUS/2)/ maptiles.TILESIZE))
 
         column = []
-        column.append(math.floor((x - maptiles.TILESIZE)/ maptiles.TILESIZE))
-        column.append(math.floor((x + maptiles.TILESIZE)/ maptiles.TILESIZE))
+        column.append(math.floor((x - PLAYER_RADIUS/2)/ maptiles.TILESIZE))
+        column.append(math.floor((x + PLAYER_RADIUS/2)/ maptiles.TILESIZE))
 
         # leng(world.access_map[0]) gives column (32)
         # len (world.access_map) gives rows (24)
