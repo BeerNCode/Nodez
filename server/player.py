@@ -7,6 +7,9 @@ import vector
 import colours
 import random
 import spritesheet
+import maptiles
+import math
+
 from entity import Entity
 from tools import *
 from vector import Vector
@@ -110,8 +113,11 @@ class Player(Entity):
             dx *= 0.717
             dy *= 0.717
 
-        self.pos.x += dx
-        self.pos.y += dy
+
+        if self.move(self.pos.x + dx, 0, world) :
+            self.pos.x += dx
+        if self.move(0, self.pos.y + dy, world) : 
+            self.pos.y += dy
 
         if not movingHorizontally and not movingVertically:
             if self.direction == 0:
@@ -164,6 +170,30 @@ class Player(Entity):
             if self.node_cooldown <= 0:
                 self.node_ready = True
 
+    def move(self, x, y, world) :
+        self.row = []
+        self.row.append(math.floor(y - maptiles.TILESIZE))
+        self.row.append(math.floor(y + maptiles.TILESIZE))
+
+        self.column = []
+        self.column.append(math.floor(x - maptiles.TILESIZE))
+        self.column.append(math.floor(x + maptiles.TILESIZE))
+
+        checkrow = 0
+        checkcolumn = 0
+
+        while checkrow < 2:
+            while checkcolumn < 2 :
+                if world.accessMap[checkrow][checkcolumn] == 15:
+                    return False
+                checkcolumn += 1
+            if world.accessMap[checkrow][checkcolumn] == 15:
+                return False
+            checkrow +=1
+
+        return True
+
+        
     def show(self, screen):
         super().show()
         pygame.draw.rect(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS*0.6, self.pos.y+PLAYER_RADIUS, 2*PLAYER_RADIUS*0.6, 5], 0)
