@@ -22,9 +22,8 @@ CONTROLS = [
 
 def generate_basic(width, height):
     mapGen = map_generator.MapGenerator((width, height), maptiles.TILESIZE)
-    blockMap = mapGen.generate_block_map(5)
-    accessMap = mapGen.generate_access_map(blockMap)
-    world = maptiles.MapTiles(accessMap)
+    block_map = mapGen.generate_block_map(5)
+    world = maptiles.MapTiles(block_map, mapGen.numX, mapGen.numY)
 
     teams = []
     nodes = []
