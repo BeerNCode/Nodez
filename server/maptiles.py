@@ -1,9 +1,6 @@
 import pygame
-<<<<<<< HEAD:server/map.py
 import os
-=======
 import spritesheet
->>>>>>> 80d7e0d65b920dfb6290daeb2a4e830124ad2ada:server/maptiles.py
 from tile import Tile
 
 OPEN_TILE = 0
@@ -23,20 +20,6 @@ COLOURS = {
     }
 TILESIZE = 32
 
-<<<<<<< HEAD:server/map.py
-class Map:
-    tilesize = TILESIZE
-    grass_img = pygame.image.load(os.path.join('server', 'resources', 'grass-200.png'))
-    grass_inv_img = pygame.image.load(os.path.join('server', 'resources', 'grass-inv-200.png'))
-    tilemap = [
-        [grass_img,grass_img,grass_img],
-        [grass_img,grass_inv_img,grass_img],
-        [grass_inv_img,grass_img,grass_img],
-        [grass_img,grass_img,grass_inv_img]
-        ]
-    height = 4
-    width = 3
-=======
 class MapTiles:
     def __init__(self):
         self.tilesize = TILESIZE
@@ -46,15 +29,28 @@ class MapTiles:
         topLeft = ss.image_at((32, 32, 64, 64))
         sideLeft = ss.image_at((32, 64, 64, 96))
         bottomLeft = ss.image_at((32, 96, 64, 128))
+        topCentre = ss.image_at((64, 32, 96, 64))
+        centre = ss.image_at((64, 64, 96, 96))
+        bottomCentre = ss.image_at((64, 96, 96, 128))
+        topRight = ss.image_at((96, 32, 128, 64))
+        sideRight = ss.image_at((96, 64, 128, 96))
+        bottomRight = ss.image_at((96, 96, 128, 128))
         self.tilemap = [
-            [topLeft,topLeft,topLeft],
-            [sideLeft,sideLeft,sideLeft],
-            [bottomLeft,bottomLeft,bottomLeft]
+            [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight]
             ]
-        self.height = 3
-        self.width = 3
->>>>>>> 80d7e0d65b920dfb6290daeb2a4e830124ad2ada:server/maptiles.py
-    
+
+        self.height = 10
+        self.width = 10
+
     def show(self,screen):
         
         for row in range(self.height): 
