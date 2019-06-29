@@ -65,11 +65,24 @@ class Player(Entity):
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
-        self.key_up = keys[self.controls["up"]]
-        self.key_down = keys[self.controls["down"]]
-        self.key_left = keys[self.controls["left"]]
-        self.key_right = keys[self.controls["right"]]
-        self.key_space = keys[self.controls["space"]]
+        if (self.controls.hasGamepad()):
+            joystick = self.controls.getGamepad()
+            hats = joystick.get_hat(0)
+            logger.debug(hats)
+            self.key_up = hats[1]==1
+            self.key_down = hats[1]==-1
+            self.key_left = hats[0]==-1
+            self.key_right = hats[0]==1
+            if (joystick.get_numbuttons()>2):
+                self.key_space = joystick.get_button( 1 )==1
+            else:
+                self.key_space = keys[self.controls.getKeys()["space"]]
+        else:
+            self.key_up = keys[self.controls.getKeys()["up"]]
+            self.key_down = keys[self.controls.getKeys()["down"]]
+            self.key_left = keys[self.controls.getKeys()["left"]]
+            self.key_right = keys[self.controls.getKeys()["right"]]
+            self.key_space = keys[self.controls.getKeys()["space"]]
 
     def update(self, world, nodes):
         self.capture_inputs()

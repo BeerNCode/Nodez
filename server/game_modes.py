@@ -3,6 +3,7 @@ import random
 import pygame
 import map_generator
 import maptiles
+from controls import Controls
 from vector import Vector
 from nodes import Node
 from player import Player
@@ -49,7 +50,12 @@ def generate_basic(width, height):
     players = []
     t = 0
     for i in range(number_of_players):
-        controls = CONTROLS[i]
+        joystick = None
+        if (i>=number_of_players-pygame.joystick.get_count()):
+            joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+            joysticks[i-(number_of_players-pygame.joystick.get_count())].init()
+            joystick = joysticks[i-(number_of_players-pygame.joystick.get_count())]
+        controls = Controls(CONTROLS[i],joystick)
         team = teams[t]
         t += 1
         if t >= len(teams):
