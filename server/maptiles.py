@@ -1,4 +1,5 @@
 import pygame
+import spritesheet
 from tile import Tile
 OPEN_TILE = 0
 HIGH_NOISE = 1
@@ -15,20 +16,24 @@ COLOURS = {
         SOURCE_TILE : GREEN,
         SINK_TILE : BLUE
     }
-TILESIZE = 200
+TILESIZE = 32
 
-class Map:
-    tilesize = TILESIZE
-    grass_img = pygame.image.load('resources\grass-200.png')
-    grass_inv_img = pygame.image.load('resources\grass-inv-200.png')
-    tilemap = [
-        [grass_img,grass_img,grass_img],
-        [grass_img,grass_inv_img,grass_img],
-        [grass_inv_img,grass_img,grass_img],
-        [grass_img,grass_img,grass_inv_img]
-        ]
-    height = 4
-    width = 3
+class MapTiles:
+    def __init__(self):
+        self.tilesize = TILESIZE
+        grass_img = pygame.image.load('server\\resources\\grass-200.png')
+        grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
+        ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
+        topLeft = ss.image_at((32, 32, 64, 64))
+        sideLeft = ss.image_at((32, 64, 64, 96))
+        bottomLeft = ss.image_at((32, 96, 64, 128))
+        self.tilemap = [
+            [topLeft,topLeft,topLeft],
+            [sideLeft,sideLeft,sideLeft],
+            [bottomLeft,bottomLeft,bottomLeft]
+            ]
+        self.height = 3
+        self.width = 3
     
     def show(self,screen):
         

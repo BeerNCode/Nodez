@@ -7,7 +7,7 @@ import colours
 import nodes
 from team import Team
 from player import Player
-from map import Map
+from maptiles import MapTiles
 from nodes import Node
 from vector import Vector
 import random
@@ -78,8 +78,8 @@ class Program:
     def render(self):
         self.screen.fill(colours.BLACK)
 
-        map = Map()
-        map.show(self.screen)
+        mapTiles = MapTiles()
+        mapTiles.show(self.screen)
         for player in self.players:
             player.show(self.screen)
         for node in self.nodes:
