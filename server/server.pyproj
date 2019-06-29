@@ -20,7 +20,6 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="clients.py" />
     <Compile Include="maptiles.py">
       <SubType>Code</SubType>
     </Compile>

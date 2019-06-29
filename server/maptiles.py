@@ -27,13 +27,26 @@ class MapTiles:
         topLeft = ss.image_at((32, 32, 64, 64))
         sideLeft = ss.image_at((32, 64, 64, 96))
         bottomLeft = ss.image_at((32, 96, 64, 128))
+        topCentre = ss.image_at((64, 32, 96, 64))
+        centre = ss.image_at((64, 64, 96, 96))
+        bottomCentre = ss.image_at((64, 96, 96, 128))
+        topRight = ss.image_at((96, 32, 128, 64))
+        sideRight = ss.image_at((96, 64, 128, 96))
+        bottomRight = ss.image_at((96, 96, 128, 128))
         self.tilemap = [
-            [topLeft,topLeft,topLeft],
-            [sideLeft,sideLeft,sideLeft],
-            [bottomLeft,bottomLeft,bottomLeft]
+            [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight]
             ]
-        self.height = 3
-        self.width = 3
+        self.height = 10
+        self.width = 10
     
     def show(self,screen):
         
