@@ -23,7 +23,7 @@ CONTROLS = [
 
 def generate_basic(width, height):
     mapGen = map_generator.MapGenerator((width, height), maptiles.TILESIZE)
-    block_map = mapGen.generate_block_map(5)
+    block_map = mapGen.generate_block_map(10)
     world = maptiles.MapTiles(block_map, mapGen.numX, mapGen.numY)
 
     teams = []
