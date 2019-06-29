@@ -2,10 +2,25 @@ import pygame
 import os
 import spritesheet
 from tile import Tile
-from map_generator import MapGenerator
+#TRDL
+XXXX = 0
+XXXO = 1
+XXOX = 2
+XXOX = 3
+XXOO = 4
+XOXO = 5
+XOOX = 6
+XOOO = 7
+OXXO = 8
+OXOX = 9
+OXOX = 10
+OXOO = 11
+OOXO = 12
+OOOX = 13
+OOOX = 14
+OOOO = 15
 
-OPEN_TILE = 0
-HIGH_NOISE = 1
+
 SOURCE_TILE = 2
 SINK_TILE = 3
 BLACK = (30,30,30)
@@ -13,12 +28,6 @@ BROWN = (153,76,0)
 GREEN = (30,255,30)
 BLUE = (30,40,255)
 RED = (255,40,55)
-COLOURS = {
-        OPEN_TILE : BLACK,
-        HIGH_NOISE : RED,
-        SOURCE_TILE : GREEN,
-        SINK_TILE : BLUE
-    }
 TILESIZE = 32
 
 class MapTiles:
@@ -42,6 +51,13 @@ class MapTiles:
         topRight = ss.image_at((32*6, 64, 32*6+32, 96))
         sideRight = ss.image_at((32*6, 32*4, 32*6+32, 32*4+32))
         bottomRight = ss.image_at((32*6, 32*6, 32*6+32, 32*6+32))
+<<<<<<< HEAD
+=======
+        bottomEdge = ss.image_at((32*6, 32*7, 32*6+32, 32*7+32))
+        self.accessMap = [
+            
+            ]
+>>>>>>> dc12edba9e4e93ef86fd6949e1480c60035e50c4
 
         self.tilemap = [
             [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
@@ -52,8 +68,8 @@ class MapTiles:
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight]
+            [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight],
+            [bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge]
         ]
         for row in range(self.rows): 
             for col in range(self.columns):
@@ -61,3 +77,7 @@ class MapTiles:
 
     def show(self, screen):
         screen.blit(self.map_surface, (0, 0, self.width, self.height))
+
+    def lookupTile(self,row,col):
+        if (self.accessMap):
+            return
