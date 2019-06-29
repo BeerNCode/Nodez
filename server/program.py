@@ -7,14 +7,13 @@ import colours
 import nodes
 
 import maptiles
-import map_generator
 from team import Team
 from player import Player
 from maptiles import MapTiles
 from nodes import Node
 from vector import Vector
 import random
-
+import game_modes
 from tools import *
 
 logging.basicConfig(level=logging.DEBUG)
@@ -36,39 +35,18 @@ class Program:
         self.teams = []
         self.players = []
         self.nodes = []
-
-        mapGen = map_generator.MapGenerator((SCREEN_WIDTH, SCREEN_HEIGHT),maptiles.TILESIZE)
-        blockMap = mapGen.generate_block_map(5)
-        accessMap = mapGen.generate_access_map(blockMap)
-
-        self.world = MapTiles(accessMap)
         self.clock = pygame.time.Clock()
-        teamA = Team("Sharks", (0, 0, 255))
-        teamB = Team("Tigers", (0, 255, 0))
-        self.teams.append(teamA)
-        self.teams.append(teamB)
-        teamANode = Node(True,False,Vector(SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.5))
-        teamBNode = Node(True,False,Vector(SCREEN_WIDTH*0.9, SCREEN_HEIGHT*0.5))
-        teamANode.team = teamA
-        teamBNode.team = teamB
-        teamA.node = teamANode
-        teamB.node = teamBNode
-        self.nodes.append(teamANode)
-        self.nodes.append(teamBNode)
-        self.nodes.append(Node(True,True,Vector(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5)))
-
-        for i in range(NUMBER_OF_NODES):
-            x = random.random() * SCREEN_WIDTH
-            y = random.random() * SCREEN_HEIGHT
-            self.nodes.append(Node(False,False,Vector(x, y)))
-
         self.start_ticks=pygame.time.get_ticks()
-        self.players.append(Player("Dave",self.teams[0], {"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE}))
-        self.players.append(Player("Tom",self.teams[1], {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_g}))
+        
+        game_mode = game_modes.generate_basic(SCREEN_WIDTH, SCREEN_HEIGHT)
+        for node in game_mode["nodes"]:
+            self.nodes.append(node)
+        for player in game_mode["players"]:
+            self.players.append(player)
+        for team in game_mode["teams"]:
+            self.teams.append(team)
+        self.world = game_mode["world"]
         self.running = True
-
-    def update(self):
-        logger.info("Got update!")
 
     def run(self):
         while self.running:
@@ -80,11 +58,8 @@ class Program:
                 node.update()
 
             self.render()
-      
-            pygame.display.flip()
-
             self.update_timer()
-
+            pygame.display.flip()
             self.clock.tick(GAME_SPEED)
 
     def update_events(self):
