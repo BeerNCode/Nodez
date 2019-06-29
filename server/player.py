@@ -179,12 +179,12 @@ class Player(Entity):
 
     def move(self, x, y, world) :
         row = []
-        row.append(math.floor((y - maptiles.TILESIZE)/ maptiles.TILESIZE))
-        row.append(math.floor((y + maptiles.TILESIZE)/ maptiles.TILESIZE))
+        row.append(math.floor((y - maptiles.TILESIZE/2)/ maptiles.TILESIZE))
+        row.append(math.floor((y + maptiles.TILESIZE/2)/ maptiles.TILESIZE))
 
         column = []
-        column.append(math.floor((x - maptiles.TILESIZE)/ maptiles.TILESIZE))
-        column.append(math.floor((x + maptiles.TILESIZE)/ maptiles.TILESIZE))
+        column.append(math.floor((x - maptiles.TILESIZE/2)/ maptiles.TILESIZE))
+        column.append(math.floor((x + maptiles.TILESIZE/2)/ maptiles.TILESIZE))
 
         # leng(world.access_map[0]) gives column (32)
         # len (world.access_map) gives rows (24)
