@@ -1,35 +1,22 @@
-    # def listen_for_new_clients(self):
-    #     self.socket.bind((IP_ADDRESS, PORT))
-    #     self.socket.listen(5)
-    #     self.socket.settimeout(CLIENT_TIMEOUT)
-    #     while self.running:
-    #         try:
-    #             logger.info(f"Listening for connection....")
-    #             connection, ip_address = self.socket.accept()
-    #             logger.info(f"Received connection from [{ip_address}]")
-    #             client = clients.Client(connection, ip_address)
-    #             client.connection.settimeout(CLIENT_TIMEOUT)
-    #             client.start_listening()
-    #             self.clients.append(client)
+from flask import Flask
+from flask_socketio import SocketIO
 
-    #         except Exception as e:
-    #             logger.error("Unable to connect to client.")
-    #             logger.debug(e.args)
+app = Flask(__name__)
+socketio = SocketIO(app)
 
-    # class Client():
-    # def __init__(self, connection, ip_address):
-    #     self.connection = connection
-    #     self.ip_address = ip_address
-    #     self.running = True
-    #     self.keys = {}
-    #     self.listen_thread = threading.Thread(target=self.listen)
+@socketio.on('connect')
+def network_connect(sid):
+    print("client has connected")
 
-    # def start_listening(self):
-    #     self.listen_thread.start()
+@socketio.on('disconnect')
+def network_disconnect(sid, ):
+    print("client has disconnected")
 
-    # def listen(self):
-    #     logger.info("Listening to client.")
-    #     while self.running:
-    #         data = read_json(self.connection)
-    #         if data is not None:
-    #             self.keys = data
+@socketio.on('update')
+def client_update(sid, controller_state):
+    print(sid)
+    print(controller_state)
+
+if __name__ == '__main__':
+    socketio.run(app, "0.0.0.0", port=5000)
+    pass

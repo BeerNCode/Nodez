@@ -1,7 +1,7 @@
 
 const CONTROLLER_STATE_UPDATE = "update";
 const CONTROLLER_STATE_UPDATE_FREQUENCY = 100;
-const IP_ADDRESS = "localhost";
+const IP_ADDRESS = window.prompt('Enter server IP: ')
 const PORT = "5000";
 
 let canvas;
@@ -18,14 +18,14 @@ function setup() {
     canvas.parent('sketch-div');
 
     buttons = {
-        a: new Button("A", 0.625, 0.5),
-        b: new Button("B", 0.75, 0.75),
-        c: new Button("C", 0.875, 0.5),
-        d: new Button("D", 0.75, 0.25),
-        up: new Button("🡅", 0.25, 0.25),
-        down: new Button("🡇", 0.25, 0.75),
-        left: new Button("🡄", 0.125, 0.5),
-        right: new Button("🡆", 0.375, 0.5),
+        a: new Button("A", 0.625, 0.5, 100),
+        b: new Button("B", 0.75, 0.75, 100),
+        c: new Button("C", 0.875, 0.5, 100),
+        d: new Button("D", 0.75, 0.25, 100),
+        up: new Button("🡅", 0.25, 0.25, 100),
+        down: new Button("🡇", 0.25, 0.75, 100),
+        left: new Button("🡄", 0.125, 0.5, 100),
+        right: new Button("🡆", 0.375, 0.5, 100),
     }
     button_list = Object.values(buttons);
     background(51);
@@ -85,8 +85,8 @@ class Button {
         let r2 = this.radius * this.radius;
         for(let i=0;i<touches.length;i++) {
             let touch = touches[i];
-            let dx = touch.x - this.x; 
-            let dy = touch.y - this.y; 
+            let dx = touch.x - this.x * width; 
+            let dy = touch.y - this.y * height; 
             if (dx * dx + dy * dy < r2) return true;
         }
         return false;
@@ -97,7 +97,7 @@ class Button {
         let dx = width * this.x;
         let dy = height * this.y;
 
-        ellipse(dx, dy, 100, 100);
+        ellipse(dx, dy, this.radius, this.radius);
         fill(255);
         stroke(0);
         textSize(width / 10);
