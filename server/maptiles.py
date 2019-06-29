@@ -41,59 +41,63 @@ class MapTiles:
         grass_img = pygame.image.load('server\\resources\\grass-200.png')
         grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
         ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
-        blank = ss.image_at((0, 0, 32, 32),(255,255,255))
-        topLeft = ss.image_at((64, 64, 32, 32),(255,255,255))
-        sideLeft = ss.image_at((64, 96, 32, 32),(255,255,255))
-        bottomLeft = ss.image_at((64, 32*6, 32, 32),(255,255,255))
-        topCentre = ss.image_at((96, 64, 32, 32),(255,255,255))
-        centre = ss.image_at((96, 32*4, 32, 32),(255,255,255))
-        bottomCentre = ss.image_at((96, 32*6, 32, 32),(255,255,255))
-        topRight = ss.image_at((32*6, 64, 32, 32),(255,255,255))
-        sideRight = ss.image_at((32*6, 32*4, 32, 32),(255,255,255))
-        bottomRight = ss.image_at((32*6, 32*6, 32, 32),(255,255,255))
-        bottomEdge = ss.image_at((32*6, 32*7, 32, 32),(255,255,255))
-        leftRightBridge = ss.image_at((264, 64, 32, 32),(255,255,255))
-        leftBlock = ss.image_at((64, 256, 32, 32),(255,255,255))
-        rightBlock = ss.image_at((96, 256, 32, 32),(255,255,255))
-        topBottomBridge = ss.image_at((280, 340, 32, 32),(255,255,255))
-        barrelIcon = ss.image_at((392, 219, 32, 32),(255,255,255))
-        barrel = pygame.Surface((32,32)).convert()
-        barrel.blit(centre, (0, 0, self.width, self.height))
-        barrel.blit(barrelIcon, (0, 0, self.width, self.height))
+        self.blank = ss.image_at((0, 0, 32, 32),(255,255,255))
+        self.topLeft = ss.image_at((64, 64, 32, 32),(255,255,255))
+        self.sideLeft = ss.image_at((64, 96, 32, 32),(255,255,255))
+        self.bottomLeft = ss.image_at((64, 32*6, 32, 32),(255,255,255))
+        self.topCentre = ss.image_at((96, 64, 32, 32),(255,255,255))
+        self.centre = ss.image_at((96, 32*4, 32, 32),(255,255,255))
+        self.bottomCentre = ss.image_at((96, 32*6, 32, 32),(255,255,255))
+        self.topRight = ss.image_at((32*6, 64, 32, 32),(255,255,255))
+        self.sideRight = ss.image_at((32*6, 32*4, 32, 32),(255,255,255))
+        self.bottomRight = ss.image_at((32*6, 32*6, 32, 32),(255,255,255))
+        self.bottomEdge = ss.image_at((32*6, 32*7, 32, 32),(255,255,255))
+        self.leftRightBridge = ss.image_at((264, 64, 32, 32),(255,255,255))
+        self.leftBlock = ss.image_at((64, 256, 32, 32),(255,255,255))
+        self.rightBlock = ss.image_at((96, 256, 32, 32),(255,255,255))
+        self.topBottomBridge = ss.image_at((280, 340, 32, 32),(255,255,255))
+        self.barrelIcon = ss.image_at((392, 219, 32, 32),(255,255,255))
+        self.barrel = pygame.Surface((32,32)).convert()
+        self.barrel.blit(self.centre, (0, 0, self.width, self.height))
+        self.barrel.blit(self.barrelIcon, (0, 0, self.width, self.height))
 
         self.accessMap = accessMap
+        
 
 
         self.tilemap = [[0] * self.columns for _ in range(self.rows)]
         for row in range(self.rows): 
             for col in range(self.columns):
-                if (row == 0):
-                    if (col == 0):
-                        self.tilemap[row][col] = topLeft
-                    elif (col == self.columns-1):
-                        self.tilemap[row][col] = topRight
-                    else:
-                        self.tilemap[row][col] = topCentre
-                    continue
-                if (row == self.rows-2):
-                    if (col == 0):
-                        self.tilemap[row][col] = bottomLeft
-                    elif (col == self.columns-1):
-                        self.tilemap[row][col] = bottomRight
-                    else:
-                        self.tilemap[row][col] = bottomCentre
-                    continue
-                if (row == self.rows-1):
-                    self.tilemap[row][col] = bottomEdge
-                    continue
-                if (col == 0):
-                    self.tilemap[row][col] = sideLeft
-                elif (col == self.columns-1):
-                    self.tilemap[row][col] = sideRight
-                else:
-                    self.tilemap[row][col] = centre
-                continue
-        self.tilemap[5][5] = barrel
+                self.tilemap[row][col] = self.lookupTile(row,col)
+        #for row in range(self.rows): 
+        #    for col in range(self.columns):
+        #        if (row == 0):
+        #            if (col == 0):
+        #                self.tilemap[row][col] = topLeft
+        #            elif (col == self.columns-1):
+        #                self.tilemap[row][col] = topRight
+        #            else:
+        #                self.tilemap[row][col] = topCentre
+        #            continue
+        #        if (row == self.rows-2):
+        #            if (col == 0):
+        #                self.tilemap[row][col] = bottomLeft
+        #            elif (col == self.columns-1):
+        #                self.tilemap[row][col] = bottomRight
+        #            else:
+        #                self.tilemap[row][col] = bottomCentre
+        #            continue
+        #        if (row == self.rows-1):
+        #            self.tilemap[row][col] = bottomEdge
+        #            continue
+        #        if (col == 0):
+        #            self.tilemap[row][col] = sideLeft
+        #        elif (col == self.columns-1):
+        #            self.tilemap[row][col] = sideRight
+        #        else:
+        #            self.tilemap[row][col] = centre
+        #        continue
+        #self.tilemap[5][5] = barrel
 
         for row in range(self.rows): 
             for col in range(self.columns):
@@ -103,42 +107,42 @@ class MapTiles:
         screen.blit(self.map_surface, (0, 0, self.width, self.height))
 
     def lookupTile(self,row,col):
-        if (self.accessMap[row][col]==XXXX):
-            if (row>0 and row < self.rows-1 and col >0 and col < self.cols-1):
-                if (self.accessMap[row-1][col-1]==OOOO and self.accessMap[row-1][col]==OOOO and self.accessMap[row-1][col+1]==OOOO and
-                    self.accessMap[row][col-1]==OOOO and self.accessMap[row][col+1]==OOOO and
-                    self.accessMap[row+1][col-1]==OOOO and self.accessMap[row+1][col]==OOOO and self.accessMap[row+1][col+1]==OOOO):
+        if (self.accessMap[col][row]==XXXX):
+            if (row>0 and row < self.rows-1 and col >0 and col < self.columns-1):
+                if (self.accessMap[col-1][row-1]==OOOO and self.accessMap[col-1][row]==OOOO and self.accessMap[col-1][row+1]==OOOO and
+                    self.accessMap[col][row-1]==OOOO and self.accessMap[col][row+1]==OOOO and
+                    self.accessMap[col+1][row-1]==OOOO and self.accessMap[col+1][row]==OOOO and self.accessMap[col+1][row+1]==OOOO):
                     return self.barrel
-            if (row>0 and self.accessMap[row-1][col]!=XXXX):
+            if (row>0 and self.accessMap[col][row-1]!=XXXX):
                 return self.bottomEdge
             return self.blank
-        if (self.accessMap[row][col]==XXXO):
+        if (self.accessMap[col][row]==XXXO):
             return self.rightBlock
-        if (self.accessMap[row][col]==XXOX):
+        if (self.accessMap[col][row]==XXOX):
             return self.blank
-        if (self.accessMap[row][col]==XXOO):
+        if (self.accessMap[col][row]==XXOO):
             return self.topRight
-        if (self.accessMap[row][col]==XOXX):
+        if (self.accessMap[col][row]==XOXX):
             return self.blank
-        if (self.accessMap[row][col]==XOXO):
+        if (self.accessMap[col][row]==XOXO):
             return self.leftRightBridge
-        if (self.accessMap[row][col]==XOOX):
+        if (self.accessMap[col][row]==XOOX):
             return self.topLeft
-        if (self.accessMap[row][col]==XOOO):
+        if (self.accessMap[col][row]==XOOO):
             return self.topCentre
-        if (self.accessMap[row][col]==OXXX):
+        if (self.accessMap[col][row]==OXXX):
             return self.blank
-        if (self.accessMap[row][col]==OXXO):
+        if (self.accessMap[col][row]==OXXO):
             return self.blank
-        if (self.accessMap[row][col]==OXOX):
+        if (self.accessMap[col][row]==OXOX):
             return self.topBottomBridge
-        if (self.accessMap[row][col]==OXOO):
+        if (self.accessMap[col][row]==OXOO):
             return self.sideRight
-        if (self.accessMap[row][col]==OOXX):
+        if (self.accessMap[col][row]==OOXX):
             return self.bottomLeft
-        if (self.accessMap[row][col]==OOXO):
+        if (self.accessMap[col][row]==OOXO):
             return self.bottomCentre
-        if (self.accessMap[row][col]==OOOX):
+        if (self.accessMap[col][row]==OOOX):
             return self.sideLeft
-        if (self.accessMap[row][col]==OOOO):
+        if (self.accessMap[col][row]==OOOO):
             return self.centre
