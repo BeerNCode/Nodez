@@ -92,5 +92,5 @@ class Program:
 
     def update_timer(self):
         seconds=(pygame.time.get_ticks()-self.start_ticks)/1000 
-        if seconds>100: 
+        if seconds>10000: 
             self.running = False
