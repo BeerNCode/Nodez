@@ -47,35 +47,12 @@ class MapGenerator:
                 break
             else:
                 featureTiles.append((x, y))
+            dir = self.get_direction()
         
         return featureTiles
     
     def get_direction(self):
         return random.randint(0, 4)
-
-    def generate_access_map(self, block_map):
-        output = [[0] * self.numY for i in range(self.numX)]
-
-        max_x = self.numX - 1
-        max_y = self.numY - 1
-
-        for ix in range(self.numX):
-            for iy in range(self.numY):
-                if (block_map[ix][iy] < 0):
-                    output[ix][iy] = 15
-                    continue
-                
-                if (iy == 0 or block_map[ix][iy-1] < 0):
-                    output[ix][iy] += 8
-                if (ix == max_x or block_map[ix+1][iy] < 0):
-                    output[ix][iy] += 4
-                if (iy == max_y or block_map[ix][iy+1] < 0):
-                    output[ix][iy] += 2
-                if (ix == 0 or block_map[ix-1][iy] < 0):
-                    output[ix][iy] += 1
-        
-        return output
-        #return list(map(lambda col: list(map(self.transform_value, col)), output))
 
     def transform_value(self, val):
         output = ''

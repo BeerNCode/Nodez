@@ -19,6 +19,7 @@ from nodes import Node
 logger = logging.getLogger(__name__)
 
 PLAYER_SPEED = 3
+PLAYER_SPEED_PENALTY = 0.8
 NODE_HELD_DIAMETER = 15
 PLAYER_RADIUS = 24
 PLAYER_DIAMETER = 2 * PLAYER_RADIUS
@@ -78,32 +79,28 @@ class Player(Entity):
         
         speed = PLAYER_SPEED
         if self.node is not None:
-            speed *= 0.5
+            speed *= PLAYER_SPEED_PENALTY
 
         dx = 0
         dy = 0
         movingVertically = False
         movingHorizontally = False
         if self.key_up:
-            logger.debug("key_up")
             dy = -speed
             self.direction = 0
             super().set_sprite("walking_up")
             movingVertically = True
         elif self.key_down:
-            logger.debug("key_down")
             dy = speed
             self.direction = 1
             super().set_sprite("walking_down")
             movingVertically = True
         if self.key_left:
-            logger.debug("key_left")
             dx = -speed                
             self.direction = 2
             super().set_sprite("walking_left")
             movingHorizontally = True
         elif self.key_right:
-            logger.debug("key_right")
             dx = speed
             self.direction = 3
             super().set_sprite("walking_right")
@@ -137,9 +134,6 @@ class Player(Entity):
             self.pos.x = world.width - PLAYER_RADIUS*0.5
         if self.pos.y > world.height - PLAYER_RADIUS*0.5:
             self.pos.y = world.height - PLAYER_RADIUS*0.5
-
-        if self.key_space:
-            logger.debug("key_space")
 
         if self.node_ready:
             if self.key_space:
