@@ -2,10 +2,11 @@ import pygame
 import vector
 import colours
 import spritesheet
+import random
 from pygame import gfxdraw
 from entity import Entity
 
-NODE_RADIUS = 5
+NODE_RADIUS = 25
 NODE_RANGE = 100
 
 RED = (255, 0, 0)
@@ -29,8 +30,9 @@ class Node(Entity):
 
         tile_size = 32
         sheet = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
-        super().add_sprite("on", sheet, (375, 260, tile_size, tile_size))
-        super().set_sprite("on")
+        super().add_sprite("flicker_left", sheet, (383, 262, 16, 40))
+        super().add_sprite("flicker_right", sheet, (414, 262, 16, 40))
+        super().set_sprite("flicker_left")
 
     def update(self):
         if self.is_source:
@@ -74,6 +76,11 @@ class Node(Entity):
 
     def show(self, screen):
         super().show()
+
+        if random.random() > 0.5:
+            super().set_sprite("flicker_left")
+        else:
+            super().set_sprite("flicker_right")
 
         if self.is_placed:
             if self.team is not None:
