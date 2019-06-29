@@ -24,6 +24,7 @@ class MapTiles:
     def __init__(self):
         self.tilesize = TILESIZE
         ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
+        blank = ss.image_at((0, 0, 32, 32))
         topLeft = ss.image_at((32, 32, 64, 64))
         sideLeft = ss.image_at((32, 64, 64, 96))
         bottomLeft = ss.image_at((32, 96, 64, 128))
@@ -37,9 +38,9 @@ class MapTiles:
             [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+            [sideLeft,centre,centre,sideRight,bottomCentre,bottomCentre,bottomCentre,sideLeft,centre,sideRight],
+            [sideLeft,centre,centre,sideRight,blank,blank,blank,sideLeft,centre,sideRight],
+            [sideLeft,centre,centre,centre,topCentre,topCentre,topCentre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
