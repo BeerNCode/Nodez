@@ -47,6 +47,7 @@ class MapGenerator:
                 break
             else:
                 featureTiles.append((x, y))
+            dir = self.get_direction()
         
         return featureTiles
     
