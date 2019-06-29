@@ -33,7 +33,7 @@ class Program:
         self.teams = []
         self.players = []
         self.nodes = []
-        self.map = MapTiles()
+        self.world = MapTiles()
         teamA = Team("Sharks", (0, 0, 255))
         teamB = Team("Tigers", (0, 255, 0))
         self.teams.append(teamA)
@@ -66,7 +66,7 @@ class Program:
             self.update_events()
             
             for player in self.players:
-                player.update(self.nodes)
+                player.update(self.world, self.nodes)
             for node in self.nodes:
                 node.update()
 
@@ -83,14 +83,15 @@ class Program:
                 self.running = False
 
             if event.type == pygame.VIDEORESIZE:
-                Program.SCREEN_HEIGHT = event.h
-                Program.SCREEN_WIDTH = event.w
-                self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                SCREEN_WIDTH = event.w
+                SCREEN_HEIGHT = event.h
+                logger.info(f"Resizing the window to {SCREEN_WIDTH}x{SCREEN_HEIGHT}.")
+                self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
 
     def render(self):
-        self.screen.fill(colours.BLACK)
+        self.screen.fill(colours.LIGHT_GREY)
 
-        self.map.show(self.screen)
+        self.world.show(self.screen)
         for player in self.players:
             player.show(self.screen)
         for node in self.nodes:

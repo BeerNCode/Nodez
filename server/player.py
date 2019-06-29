@@ -5,7 +5,6 @@ import pygame
 import nodes
 import vector
 import colours
-import program
 from tools import *
 from vector import Vector
 from nodes import Node
@@ -36,7 +35,7 @@ class Player:
         self.key_right = keys[self.controls["right"]]
         self.key_space = keys[self.controls["space"]]
 
-    def update(self, nodes):
+    def update(self, world, nodes):
         self.capture_inputs()
         
         speed = PLAYER_SPEED
@@ -56,10 +55,10 @@ class Player:
             self.pos.x = PLAYER_RADIUS*0.5
         if self.pos.y < PLAYER_RADIUS*0.5:
             self.pos.y = PLAYER_RADIUS*0.5
-        if self.pos.x > program.SCREEN_WIDTH - PLAYER_RADIUS*0.5:
-            self.pos.x = program.SCREEN_WIDTH - PLAYER_RADIUS*0.5
-        if self.pos.y > program.SCREEN_HEIGHT - PLAYER_RADIUS*0.5:
-            self.pos.y = program.SCREEN_HEIGHT - PLAYER_RADIUS*0.5
+        if self.pos.x > world.width - PLAYER_RADIUS*0.5:
+            self.pos.x = world.width - PLAYER_RADIUS*0.5
+        if self.pos.y > world.height - PLAYER_RADIUS*0.5:
+            self.pos.y = world.height - PLAYER_RADIUS*0.5
 
         if self.node_ready:
             if self.key_space:
