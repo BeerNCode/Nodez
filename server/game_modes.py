@@ -27,6 +27,7 @@ def generate_basic(width, height):
     world = maptiles.MapTiles(accessMap)
 
     teams = []
+    nodes = []
     for t in range(number_of_teams):
         colour = colours.TEAM_COLOURS[t]
         team = Team(f"Team {t}", colour)
@@ -34,8 +35,8 @@ def generate_basic(width, height):
         node.team = team
         team.node = node
         teams.append(team)
+        nodes.append(node)
 
-    nodes = []
     for i in range(number_of_nodes):
         x = random.random() * world.width
         y = random.random() * world.height
