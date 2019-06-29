@@ -133,7 +133,7 @@ class MapTiles:
         if (self.accessMap[col][row]==OXXX):
             return self.blank
         if (self.accessMap[col][row]==OXXO):
-            return self.blank
+            return self.bottomRight
         if (self.accessMap[col][row]==OXOX):
             return self.topBottomBridge
         if (self.accessMap[col][row]==OXOO):
