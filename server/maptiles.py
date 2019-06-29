@@ -32,8 +32,8 @@ TILESIZE = 32
 
 class MapTiles:
     def __init__(self):
-        self.rows = 10
-        self.columns = 10
+        self.rows = 20
+        self.columns = 30
         self.height = self.rows * TILESIZE
         self.width = self.columns * TILESIZE
         self.map_surface = pygame.Surface((self.width, self.height))
@@ -56,18 +56,49 @@ class MapTiles:
             
             ]
 
-        self.tilemap = [
-            [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-            [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight],
-            [bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge]
-        ]
+        #self.tilemap = [
+        #    [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
+        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
+        #    [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight],
+        #    [bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge]
+        #]
+        self.tilemap = [[0] * self.columns for _ in range(self.rows)]
+        for row in range(self.rows): 
+            for col in range(self.columns):
+                if (row == 0):
+                    if (col == 0):
+                        self.tilemap[row][col] = topLeft
+                    elif (col == self.columns-1):
+                        self.tilemap[row][col] = topRight
+                    else:
+                        self.tilemap[row][col] = topCentre
+                    continue
+                if (row == self.rows-2):
+                    if (col == 0):
+                        self.tilemap[row][col] = bottomLeft
+                    elif (col == self.columns-1):
+                        self.tilemap[row][col] = bottomRight
+                    else:
+                        self.tilemap[row][col] = bottomCentre
+                    continue
+                if (row == self.rows-1):
+                    self.tilemap[row][col] = bottomEdge
+                    continue
+                if (col == 0):
+                    self.tilemap[row][col] = sideLeft
+                elif (col == self.columns-1):
+                    self.tilemap[row][col] = sideRight
+                else:
+                    self.tilemap[row][col] = centre
+                continue
+
+
         for row in range(self.rows): 
             for col in range(self.columns):
                 self.map_surface.blit(self.tilemap[row][col], (col*TILESIZE,row*TILESIZE,TILESIZE,TILESIZE))
@@ -83,7 +114,7 @@ class MapTiles:
         if (self.accessMap[row][col]==XXOX):
             return self.blank
         if (self.accessMap[row][col]==XXOO):
-            return self.blank
+            return self.topRight
         if (self.accessMap[row][col]==XOXX):
             return self.blank
         if (self.accessMap[row][col]==XOXO):
@@ -91,7 +122,7 @@ class MapTiles:
         if (self.accessMap[row][col]==XOOX):
             return self.topLeft
         if (self.accessMap[row][col]==XOOO):
-            return self.blank
+            return self.topCentre
         if (self.accessMap[row][col]==OXXX):
             return self.blank
         if (self.accessMap[row][col]==OXXO):
@@ -99,7 +130,7 @@ class MapTiles:
         if (self.accessMap[row][col]==OXOX):
             return self.blank
         if (self.accessMap[row][col]==OXOO):
-            return self.sideLeft
+            return self.sideRight
         if (self.accessMap[row][col]==OOXX):
             return self.bottomLeft
         if (self.accessMap[row][col]==OOXO):
@@ -107,4 +138,4 @@ class MapTiles:
         if (self.accessMap[row][col]==OOOX):
             return self.blank
         if (self.accessMap[row][col]==OOOO):
-            return self.blank
+            return self.centre
