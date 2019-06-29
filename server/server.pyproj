@@ -21,6 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="colours.py" />
+    <Compile Include="entity.py" />
     <Compile Include="maptiles.py">
       <SubType>Code</SubType>
     </Compile>
