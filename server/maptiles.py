@@ -60,10 +60,9 @@ class MapTiles:
         barrel = pygame.Surface((32,32)).convert();
         barrel.blit(centre, (0, 0, self.width, self.height))
         barrel.blit(barrelIcon, (0, 0, self.width, self.height))
-        
-        self.accessMap = [
-            
-            ]
+
+        self.accessMap = accessMap
+
 
         self.tilemap = [[0] * self.columns for _ in range(self.rows)]
         for row in range(self.rows): 
