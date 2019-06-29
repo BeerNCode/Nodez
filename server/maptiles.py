@@ -23,8 +23,6 @@ TILESIZE = 32
 class MapTiles:
     def __init__(self):
         self.tilesize = TILESIZE
-        grass_img = pygame.image.load('server\\resources\\grass-200.png')
-        grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
         ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
         topLeft = ss.image_at((32, 32, 64, 64))
         sideLeft = ss.image_at((32, 64, 64, 96))

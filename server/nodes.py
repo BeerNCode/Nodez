@@ -1,6 +1,7 @@
 import pygame
 import vector
 import colours
+from pygame import gfxdraw
 
 NODE_RADIUS = 5
 NODE_RANGE = 100
@@ -76,8 +77,8 @@ class Node:
                 line_width = 0
 
             pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RADIUS*0.5, self.pos.y-NODE_RADIUS*0.5, NODE_RADIUS, NODE_RADIUS], line_width)
-            pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RANGE*0.5, self.pos.y-NODE_RANGE*0.5, NODE_RANGE, NODE_RANGE], 2)
-
+            #pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RANGE*0.5, self.pos.y-NODE_RANGE*0.5, NODE_RANGE, NODE_RANGE], 5)
+            pygame.gfxdraw.aacircle(screen, int(self.pos.x), int(self.pos.y), int(NODE_RANGE*0.5), colour)
             screen.blit(FONT.render(f"{self.energy:.0f}", True, colours.WHITE), [self.pos.x, self.pos.y])
 
             for node in self.links:
