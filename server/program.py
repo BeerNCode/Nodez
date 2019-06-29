@@ -33,7 +33,7 @@ class Program:
         self.teams = []
         self.players = []
         self.nodes = []
-        self.map = Map()
+        self.map = MapTiles()
         teamA = Team("Sharks", (0, 0, 255))
         teamB = Team("Tigers", (0, 255, 0))
         self.teams.append(teamA)
@@ -90,12 +90,7 @@ class Program:
     def render(self):
         self.screen.fill(colours.BLACK)
 
-<<<<<<< HEAD
         self.map.show(self.screen)
-=======
-        mapTiles = MapTiles()
-        mapTiles.show(self.screen)
->>>>>>> 80d7e0d65b920dfb6290daeb2a4e830124ad2ada
         for player in self.players:
             player.show(self.screen)
         for node in self.nodes:
