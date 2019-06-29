@@ -63,8 +63,22 @@ if __name__ == "__main__":
             TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2)+300)
             screen.blit(TextSurf, TextRect)
             keys = pygame.key.get_pressed()
-            if (keys[pygame.K_SPACE]):
-               setup = True
+            if (keys[pygame.K_RETURN]):
+                setup = True
+            if (keys[pygame.K_2]):
+                playersWaiting["total"] = 2
+            if (keys[pygame.K_3]):
+                playersWaiting["total"] = 3
+            if (keys[pygame.K_4]):
+                playersWaiting["total"] = 4
+            if (keys[pygame.K_5]):
+                playersWaiting["total"] = 5
+            if (keys[pygame.K_6]):
+                playersWaiting["total"] = 6
+            if (keys[pygame.K_7]):
+                playersWaiting["total"] = 7
+            if (keys[pygame.K_8]):
+                playersWaiting["total"] = 8
         pygame.display.flip()
 
     # actually make the game
