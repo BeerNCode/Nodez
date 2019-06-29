@@ -39,13 +39,13 @@ class Player(pygame.sprite.Sprite):
         tile_size = 32
         offsets = [
             (tile_size * 0, tile_size * 0),
-            #(tile_size * 4, tile_size * 0),
-            #(tile_size * 8, tile_size * 0),
-            #(tile_size * 12, tile_size * 0),
-            #(tile_size * 0, tile_size * 4),
-            #(tile_size * 4, tile_size * 4),
-            #(tile_size * 8, tile_size * 4),
-            #(tile_size * 12, tile_size * 4),
+            (tile_size * 3, tile_size * 0),
+            (tile_size * 6, tile_size * 0),
+            (tile_size * 9, tile_size * 0),
+            (tile_size * 0, tile_size * 4),
+            (tile_size * 3, tile_size * 4),
+            (tile_size * 6, tile_size * 4),
+            (tile_size * 9, tile_size * 4),
         ]
         
         offset = offsets[random.randint(0, len(offsets)-1)]
