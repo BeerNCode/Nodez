@@ -52,22 +52,12 @@ class MapTiles:
         sideRight = ss.image_at((32*6, 32*4, 32*6+32, 32*4+32))
         bottomRight = ss.image_at((32*6, 32*6, 32*6+32, 32*6+32))
         bottomEdge = ss.image_at((32*6, 32*7, 32*6+32, 32*7+32))
+        leftRightBridge = ss.image_at((264, 64, 264+32, 96))
+        leftBlock = ss.image_at((64, 256, 96, 256+32))
+        topBottomBridge = ss.image_at((280, 340, 280+31, 340+32))
         self.accessMap = [
             
             ]
-
-        #self.tilemap = [
-        #    [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
-        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-        #    [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
-        #    [bottomLeft,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomCentre,bottomRight],
-        #    [bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge,bottomEdge]
-        #]
         self.tilemap = [[0] * self.columns for _ in range(self.rows)]
         for row in range(self.rows): 
             for col in range(self.columns):
@@ -97,7 +87,7 @@ class MapTiles:
                 else:
                     self.tilemap[row][col] = centre
                 continue
-
+        self.tilemap[5][5] = leftBlock
 
         for row in range(self.rows): 
             for col in range(self.columns):
@@ -118,7 +108,7 @@ class MapTiles:
         if (self.accessMap[row][col]==XOXX):
             return self.blank
         if (self.accessMap[row][col]==XOXO):
-            return self.blank
+            return self.leftRightBridge
         if (self.accessMap[row][col]==XOOX):
             return self.topLeft
         if (self.accessMap[row][col]==XOOO):
@@ -128,7 +118,7 @@ class MapTiles:
         if (self.accessMap[row][col]==OXXO):
             return self.blank
         if (self.accessMap[row][col]==OXOX):
-            return self.blank
+            return self.topBottomBridge
         if (self.accessMap[row][col]==OXOO):
             return self.sideRight
         if (self.accessMap[row][col]==OOXX):
@@ -136,6 +126,6 @@ class MapTiles:
         if (self.accessMap[row][col]==OOXO):
             return self.bottomCentre
         if (self.accessMap[row][col]==OOOX):
-            return self.blank
+            return self.sideLeft
         if (self.accessMap[row][col]==OOOO):
             return self.centre
