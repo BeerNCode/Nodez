@@ -43,9 +43,6 @@ class MapTiles:
         sideRight = ss.image_at((32*6, 32*4, 32*6+32, 32*4+32))
         bottomRight = ss.image_at((32*6, 32*6, 32*6+32, 32*6+32))
 
-        generator = map_generator.MapGenerator((self.width, self.height), TILESIZE)
-        tiles = generator.generate()
-
         self.tilemap = [
             [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
             [sideLeft,centre,centre,centre,centre,centre,centre,centre,centre,sideRight],
