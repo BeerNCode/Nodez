@@ -42,22 +42,27 @@ class MapTiles:
         grass_inv_img = pygame.image.load('server\\resources\\grass-inv-200.png')
         ss = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
         blank = ss.image_at((0, 0, 32, 32),(255,255,255))
-        topLeft = ss.image_at((64, 64, 96, 96),(255,255,255))
-        sideLeft = ss.image_at((64, 96, 96, 128),(255,255,255))
-        bottomLeft = ss.image_at((64, 32*6, 96, 32*6+32),(255,255,255))
-        topCentre = ss.image_at((96, 64, 128, 96),(255,255,255))
-        centre = ss.image_at((96, 32*4, 128, 32*4+32),(255,255,255))
-        bottomCentre = ss.image_at((96, 32*6, 128, 32*6+32),(255,255,255))
-        topRight = ss.image_at((32*6, 64, 32*6+32, 96),(255,255,255))
-        sideRight = ss.image_at((32*6, 32*4, 32*6+32, 32*4+32),(255,255,255))
-        bottomRight = ss.image_at((32*6, 32*6, 32*6+32, 32*6+32),(255,255,255))
-        bottomEdge = ss.image_at((32*6, 32*7, 32*6+32, 32*7+32),(255,255,255))
-        leftRightBridge = ss.image_at((264, 64, 264+32, 96),(255,255,255))
-        leftBlock = ss.image_at((64, 256, 96, 256+32),(255,255,255))
-        topBottomBridge = ss.image_at((280, 340, 280+31, 340+32),(255,255,255))
-        self.accessMap = [
-            
-            ]
+        topLeft = ss.image_at((64, 64, 32, 32),(255,255,255))
+        sideLeft = ss.image_at((64, 96, 32, 32),(255,255,255))
+        bottomLeft = ss.image_at((64, 32*6, 32, 32),(255,255,255))
+        topCentre = ss.image_at((96, 64, 32, 32),(255,255,255))
+        centre = ss.image_at((96, 32*4, 32, 32),(255,255,255))
+        bottomCentre = ss.image_at((96, 32*6, 32, 32),(255,255,255))
+        topRight = ss.image_at((32*6, 64, 32, 32),(255,255,255))
+        sideRight = ss.image_at((32*6, 32*4, 32, 32),(255,255,255))
+        bottomRight = ss.image_at((32*6, 32*6, 32, 32),(255,255,255))
+        bottomEdge = ss.image_at((32*6, 32*7, 32, 32),(255,255,255))
+        leftRightBridge = ss.image_at((264, 64, 32, 32),(255,255,255))
+        leftBlock = ss.image_at((64, 256, 32, 32),(255,255,255))
+        rightBlock = ss.image_at((96, 256, 32, 32),(255,255,255))
+        topBottomBridge = ss.image_at((280, 340, 32, 32),(255,255,255))
+        barrelIcon = ss.image_at((392, 219, 32, 32),(255,255,255))
+        barrel = pygame.Surface((32,32)).convert()
+        barrel.blit(centre, (0, 0, self.width, self.height))
+        barrel.blit(barrelIcon, (0, 0, self.width, self.height))
+
+        self.accessMap = accessMap
+
 
         self.tilemap = [[0] * self.columns for _ in range(self.rows)]
         for row in range(self.rows): 
@@ -88,7 +93,7 @@ class MapTiles:
                 else:
                     self.tilemap[row][col] = centre
                 continue
-        self.tilemap[5][5] = leftBlock
+        self.tilemap[5][5] = barrel
 
         for row in range(self.rows): 
             for col in range(self.columns):
@@ -99,9 +104,16 @@ class MapTiles:
 
     def lookupTile(self,row,col):
         if (self.accessMap[row][col]==XXXX):
+            if (row>0 and row < self.rows-1 and col >0 and col < self.cols-1):
+                if (self.accessMap[row-1][col-1]==OOOO and self.accessMap[row-1][col]==OOOO and self.accessMap[row-1][col+1]==OOOO and
+                    self.accessMap[row][col-1]==OOOO and self.accessMap[row][col+1]==OOOO and
+                    self.accessMap[row+1][col-1]==OOOO and self.accessMap[row+1][col]==OOOO and self.accessMap[row+1][col+1]==OOOO):
+                    return self.barrel
+            if (row>0 and self.accessMap[row-1][col]!=XXXX):
+                return self.bottomEdge
             return self.blank
         if (self.accessMap[row][col]==XXXO):
-            return self.blank
+            return self.rightBlock
         if (self.accessMap[row][col]==XXOX):
             return self.blank
         if (self.accessMap[row][col]==XXOO):
