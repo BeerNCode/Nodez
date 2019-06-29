@@ -51,13 +51,10 @@ class MapTiles:
         topRight = ss.image_at((32*6, 64, 32*6+32, 96))
         sideRight = ss.image_at((32*6, 32*4, 32*6+32, 32*4+32))
         bottomRight = ss.image_at((32*6, 32*6, 32*6+32, 32*6+32))
-<<<<<<< HEAD
-=======
         bottomEdge = ss.image_at((32*6, 32*7, 32*6+32, 32*7+32))
         self.accessMap = [
             
             ]
->>>>>>> dc12edba9e4e93ef86fd6949e1480c60035e50c4
 
         self.tilemap = [
             [topLeft,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topCentre,topRight],
