@@ -9,15 +9,19 @@ from tools import *
 from vector import Vector
 from nodes import Node
 
+import spritesheet
+
 logger = logging.getLogger(__name__)
 
 PLAYER_SPEED = 2
-PLAYER_RADIUS = 30
+PLAYER_RADIUS = 24
+PLAYER_DIAMETER = 2 * PLAYER_RADIUS
 NODE_COOLDOWN = 100
 
-class Player:
+class Player(pygame.sprite.Sprite):
 
     def __init__(self, name, team, controls):
+        super().__init__()
         logger.debug("Creating player.")
         self.name = name
         self.team = team
@@ -27,6 +31,12 @@ class Player:
         self.node_cooldown = 0
         self.node_ready = True
 
+        self.sprites = {}
+        sheet = spritesheet.spritesheet('server\\resources\\dungeon_tiles.png')
+        self.add_sprite("down", sheet, (0, 0, PLAYER_DIAMETER, PLAYER_DIAMETER))
+
+        self.set_sprite("down")
+
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
         self.key_up = keys[self.controls["up"]]
@@ -34,6 +44,13 @@ class Player:
         self.key_left = keys[self.controls["left"]]
         self.key_right = keys[self.controls["right"]]
         self.key_space = keys[self.controls["space"]]
+
+    def add_sprite(self, spriteid, sheet, rectangle):
+        sprite = sheet.image_at(rectangle)
+        self.sprites[spriteid] = sprite
+
+    def set_sprite(self, spriteid):
+        self.image = self.sprites[spriteid]
 
     def update(self, world, nodes):
         self.capture_inputs()
@@ -90,6 +107,10 @@ class Player:
                 self.node_ready = True
 
     def show(self, screen):
-        pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
-        if self.node:
-            pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-nodes.NODE_RADIUS/2, self.pos.y-nodes.NODE_RADIUS/2, nodes.NODE_RADIUS, nodes.NODE_RADIUS], 2)
+        self.rect = self.image.get_rect()
+        self.rect.x = (self.pos.x-self.rect.width/2)
+        self.rect.y = (self.pos.y-self.rect.height/2)
+        
+        #pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-PLAYER_RADIUS/2, self.pos.y-PLAYER_RADIUS/2, PLAYER_RADIUS, PLAYER_RADIUS], 2)
+        #if self.node:
+        #    pygame.draw.ellipse(screen, self.team.colour, [self.pos.x-nodes.NODE_RADIUS/2, self.pos.y-nodes.NODE_RADIUS/2, nodes.NODE_RADIUS, nodes.NODE_RADIUS], 2)

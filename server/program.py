@@ -90,12 +90,15 @@ class Program:
 
     def render(self):
         self.screen.fill(colours.LIGHT_GREY)
+        player_sprites = pygame.sprite.Group()
 
         self.world.show(self.screen)
         for player in self.players:
             player.show(self.screen)
+            player_sprites.add(player)
         for node in self.nodes:
             node.show(self.screen)
+        player_sprites.draw(self.screen)
 
     def update_timer(self):
         seconds=(pygame.time.get_ticks()-self.start_ticks)/1000 
