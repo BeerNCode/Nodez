@@ -5,11 +5,15 @@ import math
 import map_generator
 import game_modes
 import maptiles
+import math
+import logging
 from controls import Controls
 from vector import Vector
 from nodes import Node
 from player import Player
 from team import Team
+
+logger = logging.getLogger(__name__)
 
 number_of_source_nodes = 1
 number_of_teams = 2
@@ -46,15 +50,21 @@ def generate_basic(width, height, controls):
         nodes.append(node)
 
     for i in range(number_of_nodes):
-        x = random.random() * world.width
-        y = random.random() * world.height
-        r = random.random() * 100 + 50
+        check_seed = False
+        while check_seed == False:        
+            x = random.random() * world.width
+            y = random.random() * world.height
+            r = random.random() * 100 + 50
+            check_seed = check_boundary(x, y, 15, world)
         nodes.append(Node(False,False,Vector(x, y), r))
-
+           
     for i in range(number_of_source_nodes):
-        x = random.random() * world.width
-        y = random.random() * world.height
-        r = random.random() * 100 + 50
+        check_seed = False
+        while check_seed == False:
+            x = random.random() * world.width
+            y = random.random() * world.height
+            r = random.random() * 100 + 50
+            check_seed = check_boundary(x, y, 15, world)
         nodes.append(Node(True,True,Vector(x, y), r))
 
     players = []
@@ -72,3 +82,22 @@ def generate_basic(width, height, controls):
         "players": players,
         "world": world
     }
+
+def check_boundary(x, y, width, world):
+    row = []
+    row.append(math.floor((y - width)/ maptiles.TILESIZE))
+    row.append(math.floor((y + width)/ maptiles.TILESIZE))
+
+    column = []
+    column.append(math.floor((x - width)/ maptiles.TILESIZE))
+    column.append(math.floor((x + width)/ maptiles.TILESIZE))
+
+    checkrow = 0
+    while checkrow < 2:
+        checkcolumn = 0
+        while checkcolumn < 2 :
+            if world.access_map[column[checkrow]][row[checkcolumn]] != 15:
+                return True
+            checkcolumn += 1
+        checkrow +=1
+    return False
