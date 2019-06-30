@@ -13,7 +13,6 @@ from maptiles import MapTiles
 from nodes import Node
 from vector import Vector
 import random
-import game_modes
 from tools import *
 
 logging.basicConfig(level=logging.DEBUG)
@@ -27,19 +26,16 @@ NUMBER_OF_NODES = 20
 
 logger = logging.getLogger(__name__)
 
-class Program:
+class Game:
 
-    def __init__(self):
-        pygame.display.set_caption("Nodez")
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+    def __init__(self, screen, game_mode):
+        self.screen = screen
         self.teams = []
         self.players = []
         self.nodes = []
         self.clock = pygame.time.Clock()
         self.start_ticks=pygame.time.get_ticks()
-        pygame.joystick.init()
-
-        game_mode = game_modes.generate_basic(SCREEN_WIDTH, SCREEN_HEIGHT)
+        
         for node in game_mode["nodes"]:
             self.nodes.append(node)
         for player in game_mode["players"]:
@@ -48,8 +44,14 @@ class Program:
             self.teams.append(team)
         self.world = game_mode["world"]
         self.running = True
+        
+
+    def text_objects(self,text, font):
+        textSurface = font.render(text, True, (0,0,0))
+        return textSurface, textSurface.get_rect()
 
     def run(self):
+
         while self.running:
             pygame.event.pump()
             self.update_events()
@@ -58,8 +60,8 @@ class Program:
                 player.update(self.world, self.nodes)
             for node in self.nodes:
                 node.update()
-
             self.render()
+            
             self.update_timer()
             pygame.display.flip()
             self.clock.tick(GAME_SPEED)

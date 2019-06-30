@@ -56,8 +56,7 @@ class Player(Entity):
         offset = offsets[random.randint(0, len(offsets)-1)]
         logger.debug(f"offset is {offset}")
 
-        sheet = spritesheet.spritesheet(os.path.join('server', 'resources',
-            'player.png'))
+        sheet = spritesheet.spritesheet(os.path.join('server', 'resources','player.png'))
         super().add_sprite("up", sheet, (offset[0] + 0 * tile_size, offset[1] + 3 * tile_size, tile_size, tile_size))
         super().add_sprite("down", sheet, (offset[0] + 0 * tile_size, offset[1] + 0 * tile_size, tile_size, tile_size))
         super().add_sprite("left", sheet, (offset[0] + 0 * tile_size, offset[1] + 1 * tile_size, tile_size, tile_size))
@@ -70,10 +69,9 @@ class Player(Entity):
 
     def capture_inputs(self):
         keys = pygame.key.get_pressed()
-        if (self.controls.hasGamepad()):
-            joystick = self.controls.getGamepad()
+        if self.controls.joystick is not None:
+            joystick = self.controls.joystick
             hats = joystick.get_hat(0)
-            logger.debug(hats)
             self.key_up = hats[1]==1
             self.key_down = hats[1]==-1
             self.key_left = hats[0]==-1
@@ -82,12 +80,18 @@ class Player(Entity):
                 self.key_space = joystick.get_button( 1 )==1
             else:
                 self.key_space = keys[self.controls.getKeys()["space"]]
+        elif self.controls.network is not None:
+            self.key_up = self.controls.network["state"].up
+            self.key_down = self.controls.network["state"].down
+            self.key_left = self.controls.network["state"].left
+            self.key_right = self.controls.network["state"].right
+            self.key_space = self.controls.network["state"].a
         else:
-            self.key_up = keys[self.controls.getKeys()["up"]]
-            self.key_down = keys[self.controls.getKeys()["down"]]
-            self.key_left = keys[self.controls.getKeys()["left"]]
-            self.key_right = keys[self.controls.getKeys()["right"]]
-            self.key_space = keys[self.controls.getKeys()["space"]]
+            self.key_up = keys[self.controls.keys["up"]]
+            self.key_down = keys[self.controls.keys["down"]]
+            self.key_left = keys[self.controls.keys["left"]]
+            self.key_right = keys[self.controls.keys["right"]]
+            self.key_space = keys[self.controls.keys["space"]]
 
     def update(self, world, nodes):
         self.capture_inputs()
@@ -188,18 +192,10 @@ class Player(Entity):
         column.append(math.floor((x - PLAYER_RADIUS/2)/ maptiles.TILESIZE))
         column.append(math.floor((x + PLAYER_RADIUS/2)/ maptiles.TILESIZE))
 
-        # leng(world.access_map[0]) gives column (32)
-        # len (world.access_map) gives rows (24)
-        # logger.info(f"Array size {len(world.access_map[0])} and {len(world.access_map)}")
-        # logger.info(f"Value of rows {row[0]} and {row[1]}")
-        # logger.info(f"Value of columns {column[0]} and {column[1]}")
-
         for x in range(2):
            if row[x] < 0 or row[x] >= len(world.access_map[0]):
-                # logger.info("out of limits row")
                 return False
            if column[x] < 0 or column[x] >= len(world.access_map):
-            #    logger.info("out of limits column")
                return False
 
         checkrow = 0
@@ -208,7 +204,6 @@ class Player(Entity):
             checkcolumn = 0
             while checkcolumn < 2 :
                 if world.access_map[column[checkrow]][row[checkcolumn]] == 15:
-                    # logger.info("move prevented")
                     return False
                 checkcolumn += 1
             checkrow +=1

@@ -1,7 +1,9 @@
 import colours
 import random
 import pygame
+import math
 import map_generator
+import game_modes
 import maptiles
 import math
 import logging
@@ -18,15 +20,19 @@ number_of_teams = 2
 number_of_nodes = 20
 number_of_players = 4
 
-CONTROLS = [
-    {"up": pygame.K_UP,"down": pygame.K_DOWN, "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "space": pygame.K_SPACE},
-    {"up": pygame.K_w,"down": pygame.K_s, "left": pygame.K_a, "right": pygame.K_d, "space": pygame.K_e},
-    {"up": pygame.K_t,"down": pygame.K_g, "left": pygame.K_f, "right": pygame.K_h, "space": pygame.K_y},
-    {"up": pygame.K_i,"down": pygame.K_k, "left": pygame.K_j, "right": pygame.K_l, "space": pygame.K_o}
-]
 
 
-def generate_basic(width, height):
+def generate_basic(width, height, controls):
+    
+    # numX = int(math.ceil(width/32.0))
+    # numY = int(math.ceil(height/32.0))
+    # block_map = [[0] * numY for _ in range(numX)]
+    # for i in range(numX):
+    #     for j in range(numY):
+    #         if random.random() > 0.8:
+    #             block_map[i][j] = -1
+    #world = maptiles.MapTiles(block_map, numX, numY)
+
     mapGen = map_generator.MapGenerator((width, height), maptiles.TILESIZE)
     block_map = mapGen.generate_block_map(10)
     world = maptiles.MapTiles(block_map, mapGen.numX, mapGen.numY)
@@ -60,19 +66,12 @@ def generate_basic(width, height):
 
     players = []
     t = 0
-
-    for i in range(number_of_players):
-        joystick = None
-        if (i>=number_of_players-pygame.joystick.get_count()):
-            joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-            joysticks[i-(number_of_players-pygame.joystick.get_count())].init()
-            joystick = joysticks[i-(number_of_players-pygame.joystick.get_count())]
-        controls = Controls(CONTROLS[i],joystick)
+    for control in controls:
         team = teams[t]
         t += 1
         if t >= len(teams):
             t = 0
-        players.append(Player(f"Player {i}",team,controls))
+        players.append(Player(f"Player {i}", team, control))
 
     return {
         "nodes": nodes,

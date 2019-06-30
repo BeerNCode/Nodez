@@ -1,21 +1,34 @@
-from flask import Flask
+from flask import Flask, request
 from flask_socketio import SocketIO
+import threading
 
+import logging
+
+logger = logging.getLogger(__name__)
 app = Flask(__name__)
 socketio = SocketIO(app)
+players = {}
 
 @socketio.on('connect')
 def network_connect():
-    print("client has connected")
+    client_id = request.sid
+    logger.debug(f"client [{client_id}] has connected")
+    players[client_id] = {"state": None}
 
 @socketio.on('disconnect')
 def network_disconnect():
-    print("client has disconnected")
+    client_id = request.sid
+    logger.debug(f"client [{client_id}] has disconnected")
+    del players[client_id]
 
 @socketio.on('update')
 def client_update(controller_state):
-    print(controller_state)
+    client_id = request.sid
+    players[client_id]["state"] = controller_state
 
-if __name__ == '__main__':
+def run_thread():
+    thread = threading.Thread(target=run)
+    thread.start()
+
+def run():
     socketio.run(app, "0.0.0.0", port=5000)
-    pass
