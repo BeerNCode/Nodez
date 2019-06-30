@@ -190,16 +190,16 @@ class Player(Entity):
 
         # leng(world.access_map[0]) gives column (32)
         # len (world.access_map) gives rows (24)
-        logger.info(f"Array size {len(world.access_map[0])} and {len(world.access_map)}")
-        logger.info(f"Value of rows {row[0]} and {row[1]}")
-        logger.info(f"Value of columns {column[0]} and {column[1]}")
+        # logger.info(f"Array size {len(world.access_map[0])} and {len(world.access_map)}")
+        # logger.info(f"Value of rows {row[0]} and {row[1]}")
+        # logger.info(f"Value of columns {column[0]} and {column[1]}")
 
         for x in range(2):
            if row[x] < 0 or row[x] >= len(world.access_map[0]):
-                logger.info("out of limits row")
+                # logger.info("out of limits row")
                 return False
            if column[x] < 0 or column[x] >= len(world.access_map):
-               logger.info("out of limits column")
+            #    logger.info("out of limits column")
                return False
 
         checkrow = 0
@@ -208,7 +208,7 @@ class Player(Entity):
             checkcolumn = 0
             while checkcolumn < 2 :
                 if world.access_map[column[checkrow]][row[checkcolumn]] == 15:
-                    logger.info("move prevented")
+                    # logger.info("move prevented")
                     return False
                 checkcolumn += 1
             checkrow +=1

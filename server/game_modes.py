@@ -3,11 +3,15 @@ import random
 import pygame
 import map_generator
 import maptiles
+import math
+import logging
 from controls import Controls
 from vector import Vector
 from nodes import Node
 from player import Player
 from team import Team
+
+logger = logging.getLogger(__name__)
 
 number_of_source_nodes = 1
 number_of_teams = 2
@@ -20,6 +24,7 @@ CONTROLS = [
     {"up": pygame.K_t,"down": pygame.K_g, "left": pygame.K_f, "right": pygame.K_h, "space": pygame.K_y},
     {"up": pygame.K_i,"down": pygame.K_k, "left": pygame.K_j, "right": pygame.K_l, "space": pygame.K_o}
 ]
+
 
 def generate_basic(width, height):
     mapGen = map_generator.MapGenerator((width, height), maptiles.TILESIZE)
@@ -38,17 +43,24 @@ def generate_basic(width, height):
         nodes.append(node)
 
     for i in range(number_of_nodes):
-        x = random.random() * world.width
-        y = random.random() * world.height
+        check_seed = False
+        while check_seed == False:        
+            x = random.random() * world.width
+            y = random.random() * world.height
+            check_seed = check_boundary(x, y, 15, world)
         nodes.append(Node(False,False,Vector(x, y)))
-
+           
     for i in range(number_of_source_nodes):
-        x = random.random() * world.width
-        y = random.random() * world.height
+        check_seed = False
+        while check_seed == False:
+            x = random.random() * world.width
+            y = random.random() * world.height
+            check_seed = check_boundary(x, y, 15, world)
         nodes.append(Node(True,True,Vector(x, y)))
 
     players = []
     t = 0
+
     for i in range(number_of_players):
         joystick = None
         if (i>=number_of_players-pygame.joystick.get_count()):
@@ -68,3 +80,22 @@ def generate_basic(width, height):
         "players": players,
         "world": world
     }
+
+def check_boundary(x, y, width, world):
+    row = []
+    row.append(math.floor((y - width)/ maptiles.TILESIZE))
+    row.append(math.floor((y + width)/ maptiles.TILESIZE))
+
+    column = []
+    column.append(math.floor((x - width)/ maptiles.TILESIZE))
+    column.append(math.floor((x + width)/ maptiles.TILESIZE))
+
+    checkrow = 0
+    while checkrow < 2:
+        checkcolumn = 0
+        while checkcolumn < 2 :
+            if world.access_map[column[checkrow]][row[checkcolumn]] != 15:
+                return True
+            checkcolumn += 1
+        checkrow +=1
+    return False
