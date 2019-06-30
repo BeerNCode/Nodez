@@ -23,6 +23,7 @@ PLAYER_SPEED = 3
 PLAYER_SPEED_PENALTY = 0.8
 NODE_HELD_DIAMETER = 15
 PLAYER_RADIUS = 15
+NODE_PICKUP_REQUIRED = 100
 PLAYER_DIAMETER = 2 * PLAYER_RADIUS
 NODE_COOLDOWN = 10
 PICKUP_DISTANCE = PLAYER_RADIUS * PLAYER_RADIUS + nodes.NODE_RADIUS * nodes.NODE_RADIUS
@@ -38,6 +39,7 @@ class Player(Entity):
         self.pos = vector.Vector(self.team.node.pos.x, self.team.node.pos.y)
         self.node = None
         self.node_cooldown = 0
+        self.node_pickup = 0
         self.node_ready = True
         self.direction = 0
 
@@ -81,11 +83,11 @@ class Player(Entity):
             else:
                 self.key_space = keys[self.controls.getKeys()["space"]]
         elif self.controls.network is not None:
-            self.key_up = self.controls.network["state"].up
-            self.key_down = self.controls.network["state"].down
-            self.key_left = self.controls.network["state"].left
-            self.key_right = self.controls.network["state"].right
-            self.key_space = self.controls.network["state"].a
+            self.key_up = self.controls.network["state"]["up"]
+            self.key_down = self.controls.network["state"]["down"]
+            self.key_left = self.controls.network["state"]["left"]
+            self.key_right = self.controls.network["state"]["right"]
+            self.key_space = self.controls.network["state"]["a"]
         else:
             self.key_up = keys[self.controls.keys["up"]]
             self.key_down = keys[self.controls.keys["down"]]
@@ -153,7 +155,7 @@ class Player(Entity):
             self.pos.x = world.width - PLAYER_RADIUS*0.5
         if self.pos.y > world.height - PLAYER_RADIUS*0.5:
             self.pos.y = world.height - PLAYER_RADIUS*0.5
-
+        self.picking_up = False
         if self.node_ready:
             if self.key_space:
                 if self.node is not None:
@@ -172,16 +174,24 @@ class Player(Entity):
                             continue
 
                         if node.pos.quadrance_to(self.pos) < PICKUP_DISTANCE:
-                            self.node = node
-                            self.node.team = self.team
-                            self.node.is_placed = False
-                            self.node_ready = False
-                            self.node_cooldown = NODE_COOLDOWN
-                            break
+                            if node.team == self.team or node.team is None or self.node_pickup >= NODE_PICKUP_REQUIRED:
+                                self.node = node
+                                self.node.team = self.team
+                                self.node.is_placed = False
+                                self.node_ready = False
+                                self.node_cooldown = NODE_COOLDOWN
+                                break
+                            else:
+                                self.node_pickup += 1
+                                self.picking_up = True
+                                break                        
         else:
             self.node_cooldown -= 1
             if self.node_cooldown <= 0:
                 self.node_ready = True
+
+        if not self.picking_up:
+            self.node_pickup = 0
 
     def move(self, x, y, world) :
         row = []

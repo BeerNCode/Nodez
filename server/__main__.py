@@ -1,5 +1,6 @@
 import pygame
 import sys
+import json
 import game_modes
 import network_player
 from controls import Controls
@@ -42,6 +43,7 @@ if __name__ == "__main__":
             pygame.joystick.quit()
             pygame.joystick.init()
             playersWaiting["joysticks"]=pygame.joystick.get_count()
+            playersWaiting["remote"]=len(network_player.players)
             screen.fill((i%255,i*2%255,i*3%255))
             i = i + 1
             smallText = pygame.font.Font('freesansbold.ttf',50)
@@ -89,9 +91,9 @@ if __name__ == "__main__":
         controls.append(Controls(None, joystick, None))
 
     for network in network_player.players:
-        controls.append(Controls(None, None, network))
+        controls.append(Controls(None, None, network_player.players[network]))
 
-    for i in range(0, 4-len(controls)):
+    for i in range(0, playersWaiting["total"]-len(controls)):
         controls.append(Controls(CONTROLS[i], None, None))
 
     game_mode = game_modes.generate_basic(SCREEN_WIDTH, SCREEN_HEIGHT, controls)

@@ -19,7 +19,7 @@ FONT = pygame.font.SysFont('Calibri', 12, True, False)
 
 class Node(Entity):
 
-    def __init__(self, is_fixed, is_source, pos):
+    def __init__(self, is_fixed, is_source, pos, node_radius):
         super().__init__()
         self.pos = vector.Vector(pos.x, pos.y)
         self.is_placed = True
@@ -28,6 +28,7 @@ class Node(Entity):
         self.is_fixed = is_fixed
         self.links = set()
         self.energy = 0
+        self.node_radius = node_radius
 
         tile_size = 32
         sheet = spritesheet.spritesheet(os.path.join('server', 'resources',
@@ -66,7 +67,7 @@ class Node(Entity):
                 if node.team is None or node.team is not self.team:
                     continue
 
-            if self.pos.quadrance_to(node.pos) < NODE_RANGE * NODE_RANGE:
+            if self.pos.quadrance_to(node.pos) < (self.node_radius + node.node_radius) * (self.node_radius + node.node_radius) * 0.25:
                 self.link(node)
 
     def link(self, node):
@@ -97,7 +98,7 @@ class Node(Entity):
 
             #pygame.draw.ellipse(screen, colour, [self.pos.x-NODE_RADIUS*0.5, self.pos.y-NODE_RADIUS*0.5, NODE_RADIUS, NODE_RADIUS], line_width)
             
-            pygame.gfxdraw.aacircle(screen, int(self.pos.x), int(self.pos.y), int(NODE_RANGE*0.5), colour)
+            pygame.gfxdraw.aacircle(screen, int(self.pos.x), int(self.pos.y), int(self.node_radius*0.5), colour)
             screen.blit(FONT.render(f"{self.energy:.0f}", True, colours.WHITE), [self.pos.x, self.pos.y+NODE_RADIUS])
 
             for node in self.links:
