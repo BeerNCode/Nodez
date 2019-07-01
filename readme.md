@@ -1,5 +1,7 @@
 # Nodez
 
+![Yeaaaah look at this](https://github.com/beerncode/nodez/raw/masterdocs\img\screenshot.PNG "What a damn fine game")
+
 Guess what. It's another game!
 
 ## Getting Started
