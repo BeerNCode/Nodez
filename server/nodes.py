@@ -19,7 +19,7 @@ FONT = pygame.font.SysFont('Calibri', 12, True, False)
 
 class Node(Entity):
 
-    def __init__(self, is_fixed, is_source, pos, node_radius):
+    def __init__(self, is_fixed, is_source, pos, node_radius, intial_amount, rate):
         super().__init__()
         self.pos = vector.Vector(pos.x, pos.y)
         self.is_placed = True
@@ -27,8 +27,9 @@ class Node(Entity):
         self.is_source = is_source
         self.is_fixed = is_fixed
         self.links = set()
-        self.energy = 0
+        self.energy = intial_amount
         self.node_radius = node_radius
+        self.rate = rate
 
         tile_size = 32
         sheet = spritesheet.spritesheet(os.path.join('server', 'resources',
@@ -39,14 +40,14 @@ class Node(Entity):
 
     def update(self):
         if self.is_source:
-            self.energy += 1
+            self.energy += self.rate
 
         if self.is_fixed and self.team is not None and self.energy > 0:
             self.team.energy += 1
         else:
             for node in self.links:
                 if (node.energy < self.energy or (node.team is not None and node.is_fixed)) and self.energy > 1:
-                    rate = 50 / node.pos.distance_to(self.pos)
+                    rate = 50 / (node.pos.distance_to(self.pos) + 0.001)
                     node.energy += rate
                     self.energy -= rate
 

@@ -15,7 +15,7 @@ from team import Team
 
 logger = logging.getLogger(__name__)
 
-number_of_source_nodes = 1
+number_of_source_nodes = 4
 number_of_teams = 2
 number_of_nodes = 20
 number_of_players = 4
@@ -24,7 +24,7 @@ number_of_players = 4
 
 def generate_basic(width, height, controls):
     
-    map_gen = map_generator.MapGenerator((width, height, 32))
+    map_gen = map_generator.MapGenerator((width, height), 32)
     block_map = map_gen.generate_block_map(5)
     numX = map_gen.numX
     numY = map_gen.numY
@@ -43,7 +43,7 @@ def generate_basic(width, height, controls):
     for t in range(number_of_teams):
         colour = colours.TEAM_COLOURS[t]
         team = Team(f"Team {t}", colour)
-        node = Node(True,False,Vector(world.width*random.random(), world.height*random.random()), 100)
+        node = Node(True,False,Vector(world.width*random.random(), world.height*random.random()), 100, 0, 0)
         node.team = team
         team.node = node
         teams.append(team)
@@ -56,7 +56,9 @@ def generate_basic(width, height, controls):
             y = random.random() * world.height
             r = random.random() * 100 + 50
             check_seed = check_boundary(x, y, 15, world)
-        nodes.append(Node(False,False,Vector(x, y), r))
+        node = Node(False,False,Vector(x, y), r, 0, 0)
+        node.team = teams[i % len(teams)]
+        nodes.append(node)
            
     for i in range(number_of_source_nodes):
         check_seed = False
@@ -65,7 +67,7 @@ def generate_basic(width, height, controls):
             y = random.random() * world.height
             r = random.random() * 100 + 50
             check_seed = check_boundary(x, y, 15, world)
-        nodes.append(Node(True,True,Vector(x, y), r))
+        nodes.append(Node(True,True,Vector(x, y), r, 5000, 0))
 
     players = []
     t = 0
